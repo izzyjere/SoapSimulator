@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoapSimulator.Core", "SoapSimulator.Core\SoapSimulator.Core.csproj", "{0783FE43-1E08-44D6-ACBF-65B1D533AAD4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoapSimulator", "SoapSimulator\SoapSimulator.csproj", "{1EBDFB80-B151-48CE-8F72-489A4A8A90E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0783FE43-1E08-44D6-ACBF-65B1D533AAD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0783FE43-1E08-44D6-ACBF-65B1D533AAD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0783FE43-1E08-44D6-ACBF-65B1D533AAD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EBDFB80-B151-48CE-8F72-489A4A8A90E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EBDFB80-B151-48CE-8F72-489A4A8A90E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EBDFB80-B151-48CE-8F72-489A4A8A90E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EBDFB80-B151-48CE-8F72-489A4A8A90E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
