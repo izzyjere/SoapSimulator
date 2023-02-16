@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SoapSimulator.Core.Models;
+﻿namespace SoapSimulator.Core.Models;
 public class SoapAction
 {
     [Key]
@@ -15,4 +9,5 @@ public class SoapAction
     public ResponseFormat ResponseFormat { get; set; }
     public ActionStatus Status { get; set; }
     public List<ActionParameter> Parameters { get; set; }
+    public SystemConfiguration SystemConfiguration { get; set; }
 }

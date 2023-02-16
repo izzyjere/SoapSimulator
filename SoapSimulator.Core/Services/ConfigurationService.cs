@@ -7,15 +7,36 @@ using System.Threading.Tasks;
 using SoapSimulator.Core.Models;
 
 namespace SoapSimulator.Core.Services;
-public class ConfigurationService
+public class ConfigurationService : IConfigurationService
 {
     readonly DatabaseContext _db;
 	public ConfigurationService(DatabaseContext db)
 	{
 		_db= db;
 	}
-	public async Task<SystemConfiguration> GetCurrentConfigurationAsync()
-	{
-      
-	}
+
+    public Task DeleteConfigurationAsync(SystemConfiguration configuration)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<SystemConfiguration> GetCurrentConfigurationAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SaveConfigurationAsync(SystemConfiguration configuration)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SetCurrentConfigurationAsync(SystemConfiguration configuration)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateConfigurationAsync(SystemConfiguration configuration)
+    {
+        throw new NotImplementedException();
+    }
 }
