@@ -25,7 +25,7 @@
                             <MudTd DataLabel="Created On">@secordContext.DateCreated.ToString("dd MMM yyyy H:mm")</MudTd>
                             <MudTd DataLabel="Name">@secordContext.MethodName</MudTd>
                             <MudTd DataLabel="Actions">
-                                <MudIconButton Color="Color.Warning" Icon="@Icons.Material.Filled.TableView" OnClick="()=>Edit(secordContext)" />
+                                <MudIconButton Color="Color.Warning" Icon="@Icons.Material.Filled.TableView" OnClick="()=>View(secordContext)" />
                                 <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="()=>RemoveAction(secordContext)" />                              
                             </MudTd>
                         </RowTemplate>
@@ -34,7 +34,7 @@
             </MudGrid>
         </DialogContent>
         <DialogActions>
-            <MudButton OnClick="()=>Dialog.Cancel()">Cancel</MudButton>
+            <MudButton OnClick="()=>Dialog.Cancel()">Close</MudButton>
             <MudButton ButtonType="ButtonType.Submit" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Save</MudButton>
         </DialogActions>
     </MudDialog>
