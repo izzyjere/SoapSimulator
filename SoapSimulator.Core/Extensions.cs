@@ -13,6 +13,7 @@ public static class Extensions
             options.UseSqlite("Data Source = sysConfig.db");
         });
         services.AddScoped<IConfigurationService, ConfigurationService>();
+        services.AddSingleton<ISoapService, SimulatorSoapService>();
         return services;
     }
 }

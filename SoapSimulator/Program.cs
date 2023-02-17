@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using MudBlazor.Services;
-
 using SoapCore;
-
-using SoapSimulator;
 using SoapSimulator.Core;
+using SoapSimulator.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +14,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSoapSimulatorCore();
 builder.Services.AddMudServices();
 builder.Services.AddSoapCore();
+
 
 var app = builder.Build();
 
@@ -32,7 +31,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseEndpoints(endpoints =>
 {
-    endpoints.UseSoapEndpoint<SimulatorSoapService>("/soapsimulator.asmx", new SoapEncoderOptions(), SoapSerializer.DataContractSerializer);
+    endpoints.UseSoapEndpoint<ISoapService>("/soapsimulator.asmx", new SoapEncoderOptions(), SoapSerializer.DataContractSerializer);
 });
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
