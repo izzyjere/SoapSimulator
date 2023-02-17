@@ -10,4 +10,5 @@ public interface IConfigurationService
     Task<bool> UpdateConfigurationAsync(SystemConfiguration configuration);
     Task<bool> SetCurrentConfigurationAsync(SystemConfiguration configuration);
     Task<IEnumerable<SystemConfiguration>> GetAllConfigurationsAsync();
+    Task DeleteXSD(string fileName);
 }

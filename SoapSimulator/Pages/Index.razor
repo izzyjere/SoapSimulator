@@ -5,7 +5,7 @@
     <MudItem xs="12">
         <MudCard Square Style="height:400px">
             <MudCardHeader>
-                <MudText Typo="Typo.h6">Service Actions</MudText>
+                <MudText Typo="Typo.h6">Service Actions @(CurrentConfiguration !=null?$"[{CurrentConfiguration.Name}]":"")</MudText>
             </MudCardHeader>
             <MudCardContent>
                 @if (CurrentConfiguration is null)
@@ -14,19 +14,19 @@
                 }
                 else
                 {
-                   <MudTabs Border Color="Color.Primary">
-                    @foreach (var action in CurrentConfiguration.Actions)
-                    {
-                        <MudTabPanel Text="@action.MethodName">
-                            <MudRadioGroup T="ActionStatus">
-                            @foreach (var item in (ActionStatus[]) Enum.GetValues(typeof(ActionStatus)))
-                            {
-                                <MudRadio Placement="Placement.Right" Option="item">@item.ToString()</MudRadio>
-                            }
-                            </MudRadioGroup>
-                        </MudTabPanel>                        
-                    }
-                   </MudTabs>
+                    <MudTabs Border>
+                        @foreach (var action in CurrentConfiguration.Actions)
+                        {
+                            <MudTabPanel Text="@action.MethodName">
+                                <MudRadioGroup Class="pa-4" T="ActionStatus">
+                                    @foreach (var item in (ActionStatus[])Enum.GetValues(typeof(ActionStatus)))
+                                    {
+                                        <MudRadio Color="GetColor(item)" Placement="Placement.Right" Option="item">@item.ToString()</MudRadio><br/>
+                                    }
+                                </MudRadioGroup>
+                            </MudTabPanel>
+                        }
+                    </MudTabs>
                 }
             </MudCardContent>
         </MudCard>
@@ -35,11 +35,11 @@
         <MudCard Elevation="25">
             <MudCardHeader>
                 <MudText Typo="Typo.h6">Service Logs</MudText>
-                <MudSpacer/>
+                <MudSpacer />
                 <MudCardActions>
                     <MudIconButton Title="Clear all logs." OnClick="()=>logService.ClearAll()" Icon="@Icons.Material.Filled.ClearAll" />
                 </MudCardActions>
-            </MudCardHeader>            
+            </MudCardHeader>
             <MudCardContent Class="pa-4">
                 <div class="console">
                     <p class="console-content pa-2">
@@ -76,5 +76,11 @@
     {
         CurrentConfiguration = await configurationService.GetCurrentConfigurationAsync();
     }
-    
+    Color GetColor(ActionStatus status) => status switch{
+        ActionStatus.Failure => Color.Error,
+        ActionStatus.Success => Color.Success,
+        ActionStatus.NoResponse => Color.Info,
+        ActionStatus.NotFound => Color.Warning,
+        _ => Color.Default
+    };
 }

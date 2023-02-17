@@ -25,16 +25,19 @@
             }
         </MudTd>
         <MudTd DataLabel="Services">
-            <MudButton Color="Color.Info">Configure</MudButton>
+            <MudButton OnClick="()=>Edit(context)" Color="Color.Info">Configure</MudButton>
         </MudTd>       
-        <MudTd DataLabel="Actions">
-            <MudIconButton OnClick="()=>Edit(context)" Color="Color.Warning" Icon="@Icons.Material.Filled.Edit" />
-            <MudIconButton OnClick="()=>Edit(context)" Color="Color.Error" Icon="@Icons.Material.Filled.Delete"/>
+        <MudTd DataLabel="Actions">           
+            <MudIconButton OnClick="()=>Delete(context)" Color="Color.Error" Icon="@Icons.Material.Filled.Delete"/>
         </MudTd>       
     </RowTemplate>
 </MudTable>
 @code {
     IEnumerable<SystemConfiguration> tableData = Enumerable.Empty<SystemConfiguration>();
+    protected override async Task OnInitializedAsync()
+    {
+        await Reload();
+    }
     async void Edit(SystemConfiguration record)
     {
         var dialog = dialogService.Show<AddEditConfiguration>("Edit Configuration",new DialogParameters{["Model"]=record,["IsEditing"]=true } ,new DialogOptions { MaxWidth=MaxWidth.Medium,FullWidth=true });

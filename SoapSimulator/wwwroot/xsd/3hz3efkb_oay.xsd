@@ -1,5 +1,0 @@
-<xs:schema targetNamespace="urn:sample/types" elementFormDefault="qualified"
-           xmlns:tns="urn:sample/types">
-    <xs:simpleType name="BookId" type="string>      
-    </xs:simpleType>    
-</xs:schema>

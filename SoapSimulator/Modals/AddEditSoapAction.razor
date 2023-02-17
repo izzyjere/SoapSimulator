@@ -4,23 +4,23 @@
         <DialogContent>
             <MudGrid>
                 <MudItem xs="12">
-                    <MudTextField Variant="Variant.Outlined" @bind-Value="@Model.MethodName" Label="Method Name" For="()=>Model.MethodName" />
+                    <MudTextField ReadOnly="View" Variant="Variant.Outlined" @bind-Value="@Model.MethodName" Label="Method Name" For="()=>Model.MethodName" />
                 </MudItem>
                 <MudItem xs="12">
                     <MudText Align="Align.Center" Typo="Typo.h6">Request Format</MudText>
                     <MudDivider />
-                    <MudTextField Required Lines="6" @bind-Value="@Model.RequestFormat.Body" Variant="Variant.Outlined" Label="Enter sample request XSD." />
+                    <MudTextField ReadOnly="View" Required Lines="6" @bind-Value="@Model.RequestFormat.Body" Variant="Variant.Outlined" Label="Enter sample request XSD." />
                 </MudItem>
                 <MudItem xs="12">
                     <MudText Align="Align.Center" Typo="Typo.h6">Response Format</MudText>
                     <MudDivider />
-                    <MudTextField Required Lines="6" @bind-Value="@Model.ResponseFormat.Body" Variant="Variant.Outlined" Label="Enter sample response  XSD." />
+                    <MudTextField ReadOnly="View" Required Lines="6" @bind-Value="@Model.ResponseFormat.Body" Variant="Variant.Outlined" Label="Enter sample response  XSD." />
                 </MudItem>
             </MudGrid>
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="()=>Dialog.Cancel()">Cancel</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Save</MudButton>
+            <MudButton Disabled="View" ButtonType="ButtonType.Submit" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Save</MudButton>
         </DialogActions>
     </MudDialog>
 </EditForm>
@@ -30,10 +30,10 @@
     [Parameter]
     public SoapAction? Model { get; set; }
     [Parameter]
-    public bool IsEditing { get; set; }
+    public bool View { get; set; }
     protected override void OnInitialized()
     {
-        if (!IsEditing)
+        if (!View)
         {
             Model = new();
         }

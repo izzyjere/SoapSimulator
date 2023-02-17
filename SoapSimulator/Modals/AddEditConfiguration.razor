@@ -24,8 +24,9 @@
                         <RowTemplate>
                             <MudTd DataLabel="Created On">@secordContext.DateCreated.ToString("dd MMM yyyy H:mm")</MudTd>
                             <MudTd DataLabel="Name">@secordContext.MethodName</MudTd>
-                            <MudTd DataLabel="Actions">                                
-                                <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="()=>RemoveAction(secordContext)" />
+                            <MudTd DataLabel="Actions">
+                                <MudIconButton Color="Color.Warning" Icon="@Icons.Material.Filled.TableView" OnClick="()=>Edit(secordContext)" />
+                                <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="()=>RemoveAction(secordContext)" />                              
                             </MudTd>
                         </RowTemplate>
                     </MudTable>
@@ -51,6 +52,11 @@
         {
             Model = new();
         }
+    }
+    async void View(SoapAction record)
+    {
+        var dialog = dialogService.Show<AddEditSoapAction>("Edit Action", new DialogParameters { ["Model"] = record, ["View"] = true }, new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true });
+        var result = await dialog.Result;      
     }
     void Error() => snackBar.Add("Fill in all required fields", Severity.Error);
     async Task Save()
@@ -87,10 +93,16 @@
             }
         }
     }
-    void RemoveAction(SoapAction record)
+    async void RemoveAction(SoapAction record)
     {
-        Model.Actions.Remove(record);
-        StateHasChanged();
+        var delete = await dialogService.ShowMessageBox("Delete Action", "Are you sure you wann delete this action?", yesText: "Yes", noText: "No");
+        if ((bool)delete)
+        {
+            Model.Actions.Remove(record);
+            await configurationService.DeleteXSD(record.RequestFormat.XSDPath);
+            await configurationService.DeleteXSD(record.ResponseFormat.XSDPath);
+            StateHasChanged();
+        }
     }
     async void AddAction()
     {

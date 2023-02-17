@@ -62,7 +62,7 @@ public class ConfigurationService : IConfigurationService
         configuration.IsCurrent = true;       
         return await UpdateConfigurationAsync(configuration);
     }
-    private Task DeleteXSD(string fileName)
+    public Task DeleteXSD(string fileName)
     {
         var path = Path.Combine(_environment.WebRootPath, "xsd", fileName);
         if(File.Exists(path))
