@@ -28,20 +28,50 @@
             <MudButton Color="Color.Info">Configure</MudButton>
         </MudTd>       
         <MudTd DataLabel="Actions">
-            <MudIconButton Color="Color.Warning" Icon="@Icons.Material.Filled.Edit"/>
+            <MudIconButton OnClick="()=>Edit(context)" Color="Color.Warning" Icon="@Icons.Material.Filled.Edit" />
             <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Delete"/>
         </MudTd>       
     </RowTemplate>
 </MudTable>
 @code {
     IEnumerable<SystemConfiguration> tableData = Enumerable.Empty<SystemConfiguration>();
-    void Edit(SystemConfiguration record)
+    async void Edit(SystemConfiguration record)
     {
-
+        var dialog = dialogService.Show<AddEditConfiguration>("Edit Configuration",new DialogParameters{["Model"]=record,["IsEditing"]=true } ,new DialogOptions { MaxWidth=MaxWidth.Medium,FullWidth=true });
+        var result = await dialog.Result;
+        if(!result.Cancelled)
+        {
+            await Reload();
+        }
+    }
+    async Task Delete(SystemConfiguration configuration)
+    {
+        var delete = await dialogService.ShowMessageBox("Delete Configuration","Are you sure you wann delete this config?",yesText:"Yes",noText:"No");
+        if((bool)delete)
+        {
+            if( await configurationService.DeleteConfigurationAsync(configuration))
+            {
+                snackBar.Add("Deleted Successfully.", Severity.Success);
+                await Reload();
+            }
+            else
+            {
+                snackBar.Add("Deleted Failed.", Severity.Error);
+            }
+        }
+    }
+    async Task Reload()
+    {
+        tableData = await configurationService.GetAllConfigurationsAsync();
+        StateHasChanged();
     }
     async void AddNew()
     {
         var dialog = dialogService.Show<AddEditConfiguration>("Create new configuration", new DialogOptions { MaxWidth=MaxWidth.Medium,FullWidth=true });
         var result = await dialog.Result;
+        if(!result.Cancelled)
+        {
+            await Reload();
+        }
     }
 }
