@@ -1,0 +1,47 @@
+﻿@page "/config"
+<PageTitle>Actions || Soap Server</PageTitle>
+<MudTable Items="tableData" Bordered Striped Hover>
+    <ToolBarContent>
+        <MudButton OnClick="AddNew" StartIcon="@Icons.Material.Filled.AddBox" Variant="Variant.Outlined" Color="Color.Success">Add New</MudButton>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Date Created</MudTh>
+        <MudTh>Status</MudTh>
+        <MudTh>Services</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Date Created">@context.DateCreated.ToString("dd MMM yyyy H:mm")</MudTd>
+        <MudTd DataLabel="Status">
+            @if(context.IsCurrent)
+            {
+                <MudChip Color="Color.Success">Active</MudChip>
+            }
+            else
+            {
+                <MudChip Color="Color.Default">Inactive</MudChip>
+            }
+        </MudTd>
+        <MudTd DataLabel="Services">
+            <MudButton Color="Color.Info">Configure</MudButton>
+        </MudTd>       
+        <MudTd DataLabel="Actions">
+            <MudIconButton Color="Color.Warning" Icon="@Icons.Material.Filled.Edit"/>
+            <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Delete"/>
+        </MudTd>       
+    </RowTemplate>
+</MudTable>
+@code {
+    IEnumerable<SystemConfiguration> tableData = Enumerable.Empty<SystemConfiguration>();
+    void Edit(SystemConfiguration record)
+    {
+
+    }
+    async void AddNew()
+    {
+        var dialog = dialogService.Show<AddEditConfiguration>("Create new configuration", new DialogOptions { MaxWidth=MaxWidth.Medium,FullWidth=true });
+        var result = await dialog.Result;
+    }
+}

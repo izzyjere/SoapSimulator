@@ -1,16 +1,80 @@
 ﻿@page "/"
 
 <PageTitle>Soap Simulator Home</PageTitle>
-<MudPaper MinHeight="70vh" Elevation="24">
-    @if(CurrentConfiguration is null)
-    {
-        <MudAlert Class="mx-8" Severity="Severity.Warning">No actions have been configured.</MudAlert>
+<MudGrid Spacing="3">
+    <MudItem xs="12">
+        <MudCard Square Style="height:400px">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">Service Actions</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                @if (CurrentConfiguration is null)
+                {
+                    <MudAlert Class="mx-8" Severity="Severity.Warning">No actions have been configured.</MudAlert>
+                }
+                else
+                {
+                   <MudTabs Border Color="Color.Primary">
+                    @foreach (var action in CurrentConfiguration.Actions)
+                    {
+                        <MudTabPanel Text="@action.MethodName">
+                            <MudRadioGroup T="ActionStatus">
+                            @foreach (var item in (ActionStatus[]) Enum.GetValues(typeof(ActionStatus)))
+                            {
+                                <MudRadio Placement="Placement.Right" Option="item">@item.ToString()</MudRadio>
+                            }
+                            </MudRadioGroup>
+                        </MudTabPanel>                        
+                    }
+                   </MudTabs>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12">
+        <MudCard Elevation="25">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">Service Logs</MudText>
+                <MudSpacer/>
+                <MudCardActions>
+                    <MudIconButton Title="Clear all logs." OnClick="()=>logService.ClearAll()" Icon="@Icons.Material.Filled.ClearAll" />
+                </MudCardActions>
+            </MudCardHeader>            
+            <MudCardContent Class="pa-4">
+                <div class="console">
+                    <p class="console-content pa-2">
+                        @foreach (var log in logService.Logs)
+                        {
+                            @log <br />
+                        }
+                    </p>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+<style>
+    .console {
+        background-color: black;
+        width: 100%;
+        margin: auto;
+        height: 300px;
+        border-radius: 10px;
+        padding: 10px;
+        text-align: start;
     }
-</MudPaper>
-@code{
+
+    .console-content {
+        color: white;
+        overflow: auto;
+        font-family: 'JetBrains Mono'
+    }
+</style>
+@code {
     SystemConfiguration CurrentConfiguration = new();
     protected override async Task OnInitializedAsync()
     {
-        CurrentConfiguration = await configurationService.GetCurrentConfigurationAsync(); 
+        CurrentConfiguration = await configurationService.GetCurrentConfigurationAsync();
     }
+    
 }

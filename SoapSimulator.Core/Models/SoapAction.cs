@@ -10,4 +10,10 @@ public class SoapAction
     public ActionStatus Status { get; set; }
     public List<ActionParameter> Parameters { get; set; }
     public SystemConfiguration SystemConfiguration { get; set; }
+    public SoapAction()
+    {
+        RequestFormat = new();
+        ResponseFormat = new();
+        Parameters= new List<ActionParameter>();
+    }
 }

@@ -4,7 +4,12 @@ public class SystemConfiguration
     [Key]
     public Guid Id { get; set; }
     public DateTime DateCreated { get; set; }
+    [Required]
     public string Name { get; set; }
     public List<SoapAction> Actions { get; set; }
     public bool IsCurrent { get; set; }
+    public SystemConfiguration()
+    {
+        Actions = new List<SoapAction>();
+    }
 }
