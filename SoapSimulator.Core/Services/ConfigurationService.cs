@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 using SoapSimulator.Core.Models;
@@ -41,6 +35,11 @@ public class ConfigurationService : IConfigurationService
 
     public async Task<bool> SaveConfigurationAsync(SystemConfiguration configuration)
     {
+        configuration.Actions.ForEach(async action =>
+        {
+            action.ResponseFormat.XSDPath = await SaveXSD(action.ResponseFormat.Body);
+            action.RequestFormat.XSDPath = await SaveXSD(action.RequestFormat.Body);
+        });
         _db.SystemConfigurations.Add(configuration);
         return await _db.SaveChangesAsync()!=0;
     }
