@@ -6,4 +6,5 @@ public class SystemConfiguration
     public DateTime DateCreated { get; set; }
     public string Name { get; set; }
     public List<SoapAction> Actions { get; set; }
+    public bool IsCurrent { get; set; }
 }

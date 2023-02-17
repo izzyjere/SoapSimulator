@@ -10,6 +10,9 @@ namespace SoapSimulator.Core.Models;
 public class DatabaseContext : DbContext
 {
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
-    public virtual DbSet<RequestFormat> RequestFormatConfigurations { get; set; }
-    public virtual DbSet<ResponseFormat> ResponseFormatConfigurations { get; set; }
+    public virtual DbSet<RequestFormat> RequestFormats { get; set; }
+    public virtual DbSet<ResponseFormat> ResponseFormats { get; set; }
+    public virtual DbSet<SystemConfiguration> SystemConfigurations { get; set; }
+    public virtual DbSet<SoapAction> SoapActions { get; set;}
+    public virtual DbSet<ActionParameter> ActionParameters { get; set; }
 }

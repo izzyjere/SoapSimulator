@@ -29,11 +29,10 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
 app.UseEndpoints(endpoints =>
 {
     endpoints.UseSoapEndpoint<ISoapService>("/soapsimulator.asmx", new SoapEncoderOptions(), SoapSerializer.DataContractSerializer);
 });
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
-
 app.Run();

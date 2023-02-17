@@ -5,8 +5,9 @@ namespace SoapSimulator.Core.Services;
 public interface IConfigurationService
 {
     Task<SystemConfiguration> GetCurrentConfigurationAsync();
-    Task SaveConfigurationAsync(SystemConfiguration configuration);
-    Task DeleteConfigurationAsync(SystemConfiguration configuration);
-    Task UpdateConfigurationAsync(SystemConfiguration configuration);
-    Task SetCurrentConfigurationAsync(SystemConfiguration configuration);
+    Task<bool> SaveConfigurationAsync(SystemConfiguration configuration);
+    Task<bool> DeleteConfigurationAsync(SystemConfiguration configuration);
+    Task<bool> UpdateConfigurationAsync(SystemConfiguration configuration);
+    Task<bool> SetCurrentConfigurationAsync(SystemConfiguration configuration);
+    Task<IEnumerable<SystemConfiguration>> GetAllConfigurationsAsync();
 }
