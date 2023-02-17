@@ -55,7 +55,37 @@
     void Error() => snackBar.Add("Fill in all required fields", Severity.Error);
     async Task Save()
     {
-
+        if(!Model.Actions.Any())
+        {
+            Error();
+            return;
+        }
+        if(IsEditing)
+        {
+            var updated = await configurationService.UpdateConfigurationAsync(Model);
+            if(updated)
+            {
+                snackBar.Add("Configuration saved.", Severity.Success);
+                Dialog.Close();
+            }
+            else
+            {
+                snackBar.Add("Something went wrong.", Severity.Error);
+            }
+        }
+        else
+        {
+            var saved = await configurationService.SaveConfigurationAsync(Model);
+            if (saved)
+            {
+                snackBar.Add("Configuration saved.", Severity.Success);
+                Dialog.Close();
+            }
+            else
+            {
+                snackBar.Add("Something went wrong.", Severity.Error);
+            }
+        }
     }
     void RemoveAction(SoapAction record)
     {
