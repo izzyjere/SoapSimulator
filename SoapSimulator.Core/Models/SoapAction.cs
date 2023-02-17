@@ -4,6 +4,7 @@ public class SoapAction
     [Key]
     public Guid Id { get; set; }
     public DateTime DateCreated { get; set; }
+    [Required]
     public string MethodName { get; set; }
     public RequestFormat RequestFormat { get; set; }
     public ResponseFormat ResponseFormat { get; set; }
@@ -15,5 +16,6 @@ public class SoapAction
         RequestFormat = new();
         ResponseFormat = new();
         Parameters= new List<ActionParameter>();
+        DateCreated = DateTime.Now;
     }
 }

@@ -14,17 +14,18 @@
                     <MudDivider />
                     <MudTable Context="secordContext" Bordered Striped Hover Items="@Model.Actions">
                         <ToolBarContent>
-                            <MudButton Variant="Variant.Outlined" Color="Color.Success">Add</MudButton>
+                            <MudButton OnClick="AddAction" Variant="Variant.Outlined" Color="Color.Success">Add</MudButton>
                         </ToolBarContent>
                         <HeaderContent>
+                            <MudTh>Created On</MudTh>
                             <MudTh>Name</MudTh>
                             <MudTh>Actions</MudTh>
                         </HeaderContent>
                         <RowTemplate>
+                            <MudTd DataLabel="Created On">@secordContext.DateCreated.ToString("dd MMM yyyy H:mm")</MudTd>
                             <MudTd DataLabel="Name">@secordContext.MethodName</MudTd>
-                            <MudTd DataLabel="Actions">
-                                <MudIconButton Color="Color.Warning" Icon="@Icons.Material.Filled.Edit" />
-                                <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Delete" />
+                            <MudTd DataLabel="Actions">                                
+                                <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="()=>RemoveAction(secordContext)" />
                             </MudTd>
                         </RowTemplate>
                     </MudTable>
@@ -55,5 +56,20 @@
     async Task Save()
     {
 
+    }
+    void RemoveAction(SoapAction record)
+    {
+        Model.Actions.Remove(record);
+        StateHasChanged();
+    }
+    async void AddAction()
+    {
+        var dialog = dialogService.Show<AddEditSoapAction>("Create new action", new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true });
+        var result = await dialog.Result;
+        if(!result.Cancelled)
+        {
+            Model.Actions.Add((SoapAction)result.Data);
+            StateHasChanged();
+        }
     }
 }
