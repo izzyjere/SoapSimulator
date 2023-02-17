@@ -41,6 +41,7 @@
     void Error() => snackBar.Add("Fill in all required fields", Severity.Error);
     async Task Save()
     {
+        Model.MethodName = Model.MethodName.Trim();
         if (string.IsNullOrEmpty(Model.ResponseFormat.Body))
         {
             Error();

@@ -16,6 +16,11 @@ public class ConfigurationService : IConfigurationService
 
     public async Task<bool> DeleteConfigurationAsync(SystemConfiguration configuration)
     {
+        configuration.Actions.ForEach(async action =>
+        {
+            await DeleteXSD(action.RequestFormat.XSDPath);
+            await DeleteXSD(action.ResponseFormat.XSDPath);
+        });
         _db.SystemConfigurations.Remove(configuration);
         return await _db.SaveChangesAsync() !=0;
     }
@@ -56,6 +61,15 @@ public class ConfigurationService : IConfigurationService
         else { }
         configuration.IsCurrent = true;       
         return await UpdateConfigurationAsync(configuration);
+    }
+    private Task DeleteXSD(string fileName)
+    {
+        var path = Path.Combine(_environment.WebRootPath, "xsd", fileName);
+        if(File.Exists(path))
+        {
+            File.Delete(path);
+        }
+        return Task.CompletedTask;
     }
     private Task<string> SaveXSD(string xsd)
     {   
