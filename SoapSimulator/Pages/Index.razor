@@ -2,5 +2,15 @@
 
 <PageTitle>Soap Simulator Home</PageTitle>
 <MudPaper MinHeight="70vh" Elevation="24">
-
+    @if(CurrentConfiguration is null)
+    {
+        <MudAlert Class="mx-8" Severity="Severity.Warning">No actions have been configured.</MudAlert>
+    }
 </MudPaper>
+@code{
+    SystemConfiguration CurrentConfiguration = new();
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentConfiguration = await configurationService.GetCurrentConfigurationAsync(); 
+    }
+}

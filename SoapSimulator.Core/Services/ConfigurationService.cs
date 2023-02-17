@@ -31,23 +31,34 @@ public class ConfigurationService : IConfigurationService
                         .FirstOrDefaultAsync(c=>c.IsCurrent);
     }
 
-    public Task<IEnumerable<SystemConfiguration>> GetAllConfigurationsAsync()
+    public async Task<IEnumerable<SystemConfiguration>> GetAllConfigurationsAsync()
     {
-        throw new NotImplementedException();
+        return await _db.SystemConfigurations.Include(c => c.Actions).ThenInclude(a => a.Parameters).ToListAsync();
     }
 
-    public Task<bool> SaveConfigurationAsync(SystemConfiguration configuration)
+    public async Task<bool> SaveConfigurationAsync(SystemConfiguration configuration)
     {
-        throw new NotImplementedException();
+        _db.SystemConfigurations.Add(configuration);
+        return await _db.SaveChangesAsync()!=0;
     }
 
-    public Task<bool> SetCurrentConfigurationAsync(SystemConfiguration configuration)
+    public async Task<bool> SetCurrentConfigurationAsync(SystemConfiguration configuration)
     {
-        throw new NotImplementedException();
+        var currentConfig = await GetCurrentConfigurationAsync();
+        if (currentConfig != null)
+        {
+            currentConfig.IsCurrent = false;
+            _db.SystemConfigurations.Update(currentConfig);
+            await _db.SaveChangesAsync();
+        }
+        else { }
+        configuration.IsCurrent = true;       
+        return await UpdateConfigurationAsync(configuration);
     }
 
-    public Task<bool> UpdateConfigurationAsync(SystemConfiguration configuration)
+    public async Task<bool> UpdateConfigurationAsync(SystemConfiguration configuration)
     {
-        throw new NotImplementedException();
+        _db.SystemConfigurations.Update(configuration);
+        return await _db.SaveChangesAsync() != 0;
     }
 }
