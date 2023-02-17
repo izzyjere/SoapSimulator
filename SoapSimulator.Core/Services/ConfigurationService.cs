@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 using SoapSimulator.Core.Models;
@@ -12,9 +13,11 @@ namespace SoapSimulator.Core.Services;
 public class ConfigurationService : IConfigurationService
 {
     readonly DatabaseContext _db;
-	public ConfigurationService(DatabaseContext db)
+    readonly IWebHostEnvironment _environment;
+	public ConfigurationService(DatabaseContext db, IWebHostEnvironment environment)
 	{
 		_db= db;
+        _environment = environment;
 	}
 
     public async Task<bool> DeleteConfigurationAsync(SystemConfiguration configuration)
@@ -55,7 +58,13 @@ public class ConfigurationService : IConfigurationService
         configuration.IsCurrent = true;       
         return await UpdateConfigurationAsync(configuration);
     }
-
+    private Task<string> SaveXSD(string xsd)
+    {   
+        var fileName = Path.GetRandomFileName().Replace(".","_") + ".xsd";
+        var path = Path.Combine(_environment.WebRootPath, "xsd", fileName); 
+        File.WriteAllText(path, xsd);
+        return Task.FromResult(fileName);
+    }
     public async Task<bool> UpdateConfigurationAsync(SystemConfiguration configuration)
     {
         _db.SystemConfigurations.Update(configuration);
