@@ -11,7 +11,8 @@ public class RequestFormat
         DateCreated = DateTime.Now;
         Body =
        """
-        <soapenv:Envelope     
+       <?xml version="1.0" encoding="utf-8"?>
+       <soapenv:Envelope     
        	  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
              xmlns:syb="http://sybrin.co.za/soap">
            <soapenv:Body>
