@@ -43,7 +43,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.UseSoapEndpoint<ISoapService>(options =>
     {
-        options.Path = "/Service.svc";
+        options.Path = "/soap";
         options.IndentXml = true;      
         options.AdditionalEnvelopeXmlnsAttributes = new Dictionary<string, string>()
         {

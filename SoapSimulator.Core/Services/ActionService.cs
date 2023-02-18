@@ -33,10 +33,11 @@ public class ActionService : IActionService
                 ActionStatus.Success => ActionResponse.Success(action.Response.Body),
                 ActionStatus.Failure => null,
                 ActionStatus.No_Response => ActionResponse.Success("", "No records found."),
-                ActionStatus.Not_Found => ActionResponse.Failure("Action not found."),
+                ActionStatus.Not_Found => ActionResponse.Failure("Action set to not found."),
                 _ => ActionResponse.Success(action.Response.Body)
 
             };
+            logService.Log(nameof(ActionService), $"Executed action {actionName} successfully.");
             return result;
         }
         catch (Exception e)

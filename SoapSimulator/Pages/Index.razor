@@ -67,6 +67,8 @@
     .console-content {
         color: white;
         overflow: auto;
+        height:100%;
+        width:100%;
         font-family: 'JetBrains Mono'
     }
 </style>
@@ -75,6 +77,10 @@
     protected override async Task OnInitializedAsync()
     {
         CurrentConfiguration = await configurationService.GetCurrentConfigurationAsync();
+        logService.LogsUpdated += async (s, e) =>
+        {
+            await InvokeAsync(StateHasChanged);
+        };
     }
     Color GetColor(ActionStatus status) => status switch{
         ActionStatus.Failure => Color.Error,
