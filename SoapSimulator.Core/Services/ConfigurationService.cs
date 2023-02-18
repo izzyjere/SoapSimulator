@@ -18,8 +18,8 @@ public class ConfigurationService : IConfigurationService
     {
         configuration.Actions.ForEach(async action =>
         {
-            await DeleteXSD(action.RequestFormat.XSDPath);
-            await DeleteXSD(action.ResponseFormat.XSDPath);
+            await DeleteXSD(action.Request.XSDPath);
+            await DeleteXSD(action.Response.XSDPath);
         });
         _db.SystemConfigurations.Remove(configuration);
         return await _db.SaveChangesAsync() !=0;
@@ -41,8 +41,8 @@ public class ConfigurationService : IConfigurationService
     {
         configuration.Actions.ForEach(async action =>
         {
-            action.ResponseFormat.XSDPath = await SaveXSD(action.ResponseFormat.Body);
-            action.RequestFormat.XSDPath = await SaveXSD(action.RequestFormat.Body);
+            action.Response.XSDPath = await SaveXSD(action.Response.Body);
+            action.Request.XSDPath = await SaveXSD(action.Request.Body);
         });
         _db.SystemConfigurations.Add(configuration);
         return await _db.SaveChangesAsync()!=0;

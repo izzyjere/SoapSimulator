@@ -5,9 +5,12 @@ namespace SoapSimulator.Core.Services;
 public class SimulatorSoapService : ISoapService
 {
     readonly ILogService logService;
-    public SimulatorSoapService(ILogService logService)
+    readonly IActionService actionService;
+    
+    public SimulatorSoapService(ILogService _logService, IActionService _actionService)
     {
-        this.logService = logService;
+        logService = _logService;
+        actionService = _actionService;
     }
 
     public string Ping(string msg)
@@ -16,14 +19,10 @@ public class SimulatorSoapService : ISoapService
         return "Hello world. " + msg;
     }
 
-    public IActionResponse ExecuteAction(string actionName)
+    public IActionResponse ExecuteAction(ActionParameter parameter)
     {
-        logService.Log(actionName, "Called.");
-        return new ActionResponse() { Body = "Test" + actionName };
+        logService.Log("", "Called.");
+        return actionService.ExecuteAction(parameter.ActionName);
     }
 
-    public void SetActionParameter(Guid actionId, ActionParameter parameter)
-    {
-        throw new NotImplementedException();
-    }
 }

@@ -16,13 +16,14 @@ public class DatabaseContext : DbContext
     {
         modelBuilder.Entity<SoapAction>(e =>
         {
-            e.OwnsOne(s => s.RequestFormat, f =>
+            e.HasIndex(e => e.MethodName).IsUnique();
+            e.OwnsOne(s => s.Request, f =>
             {
                 f.ToTable("RequestFormats");
                 f.Property(ff => ff.Id);
                 f.WithOwner(ff => ff.Action);
             }); 
-            e.OwnsOne(s => s.ResponseFormat, f2 =>
+            e.OwnsOne(s => s.Response, f2 =>
             {
                 f2.ToTable("ResponseFormats");
                 f2.Property(ff => ff.Id);

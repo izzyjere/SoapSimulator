@@ -99,8 +99,8 @@
         if ((bool)delete)
         {
             Model.Actions.Remove(record);
-            await configurationService.DeleteXSD(record.RequestFormat.XSDPath);
-            await configurationService.DeleteXSD(record.ResponseFormat.XSDPath);
+            await configurationService.DeleteXSD(record.Request.XSDPath);
+            await configurationService.DeleteXSD(record.Response.XSDPath);
             StateHasChanged();
         }
     }
