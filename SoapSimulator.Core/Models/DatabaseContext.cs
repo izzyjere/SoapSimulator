@@ -12,7 +12,6 @@ public class DatabaseContext : DbContext
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }   
     public virtual DbSet<SystemConfiguration> SystemConfigurations { get; set; }
     public virtual DbSet<SoapAction> SoapActions { get; set;}
-    public virtual DbSet<ActionParameter> ActionParameters { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<SoapAction>(e =>

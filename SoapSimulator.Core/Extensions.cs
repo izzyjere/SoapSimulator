@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SoapCore;
+
 using SoapSimulator.Core.Models;
 using SoapSimulator.Core.Services;
 
@@ -19,6 +21,7 @@ public static class Extensions
         services.AddScoped<IConfigurationService, ConfigurationService>();
         services.AddSingleton<ISoapService, SimulatorSoapService>();
         services.AddSingleton<ILogService, ActionLogService>();
+        services.AddSoapExceptionTransformer((ex) => ex.Message);
         return services;
     }
 }

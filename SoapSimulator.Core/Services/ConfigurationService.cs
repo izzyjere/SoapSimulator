@@ -29,13 +29,12 @@ public class ConfigurationService : IConfigurationService
     {
         return await _db.SystemConfigurations
                         .Include(c=>c.Actions)
-                        .ThenInclude(a=>a.Parameters)
                         .FirstOrDefaultAsync(c=>c.IsCurrent);
     }
 
     public async Task<IEnumerable<SystemConfiguration>> GetAllConfigurationsAsync()
     {
-        return await _db.SystemConfigurations.Include(c => c.Actions).ThenInclude(a => a.Parameters).ToListAsync();
+        return await _db.SystemConfigurations.Include(c => c.Actions).ToListAsync();
     }
 
     public async Task<bool> SaveConfigurationAsync(SystemConfiguration configuration)

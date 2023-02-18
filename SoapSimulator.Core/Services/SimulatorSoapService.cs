@@ -1,5 +1,5 @@
-﻿using SoapSimulator.Core.Models;
-
+﻿using System.ServiceModel;
+using SoapSimulator.Core.Models;
 namespace SoapSimulator.Core.Services;
 
 public class SimulatorSoapService : ISoapService
@@ -10,18 +10,19 @@ public class SimulatorSoapService : ISoapService
         this.logService = logService;
     }
 
-    public Task<IActionResponse> ExecuteAction(Guid actionId)
+    public string Ping(string msg)
     {
-        throw new NotImplementedException();
+        logService.Log(nameof(Ping), $"Ping from {msg}.");
+        return "Hello world. " + msg;
     }
 
-    public Task<string> Ping()
+    public IActionResponse ExecuteAction(string actionName)
     {
-       logService.Log(nameof(Ping),"Service Called.");
-       return Task.FromResult("Hello world.");
+        logService.Log(actionName, "Called.");
+        return new ActionResponse() { Body = "Test" + actionName };
     }
 
-    public Task SetActionParameter(Guid actionId, ActionParameter parameter)
+    public void SetActionParameter(Guid actionId, ActionParameter parameter)
     {
         throw new NotImplementedException();
     }

@@ -9,13 +9,11 @@ public class SoapAction
     public RequestFormat RequestFormat { get; set; }
     public ResponseFormat ResponseFormat { get; set; }
     public ActionStatus Status { get; set; }
-    public List<ActionParameter> Parameters { get; set; }
     public SystemConfiguration SystemConfiguration { get; set; }
     public SoapAction()
     {
         RequestFormat = new();
-        ResponseFormat = new();
-        Parameters= new List<ActionParameter>();
+        ResponseFormat = new();      
         DateCreated = DateTime.Now;
     }
 }

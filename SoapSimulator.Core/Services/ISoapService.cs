@@ -1,10 +1,16 @@
-﻿using SoapSimulator.Core.Models;
+﻿using System.Runtime.Serialization;
+using System.ServiceModel;
+
+using SoapSimulator.Core.Models;
 
 namespace SoapSimulator.Core.Services;
-
+[ServiceContract(Namespace = "http://sybrin.co.za/soap")]
 public interface ISoapService
 {
-    Task SetActionParameter(Guid actionId, ActionParameter parameter);  
-    Task<IActionResponse> ExecuteAction(Guid actionId);
-    Task<string> Ping();
+    [OperationContract]
+    void SetActionParameter(Guid actionId, ActionParameter parameter);
+    [OperationContract]
+    IActionResponse ExecuteAction(string actionName);
+    [OperationContract]
+    string Ping(string msg);
 }

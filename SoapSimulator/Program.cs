@@ -39,6 +39,7 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.UseEndpoints(endpoints =>
 {
-    endpoints.UseSoapEndpoint<ISoapService>("/Service.asmx", new SoapEncoderOptions(), SoapSerializer.DataContractSerializer);
+    endpoints.UseSoapEndpoint<ISoapService>("/Service.svc", new SoapEncoderOptions(), SoapSerializer.DataContractSerializer);
+    endpoints.UseSoapEndpoint<ISoapService>("/Service.asmx", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
 });
 app.Run();
