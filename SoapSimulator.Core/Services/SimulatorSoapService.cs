@@ -1,5 +1,4 @@
-﻿using System.ServiceModel;
-using SoapSimulator.Core.Models;
+﻿using SoapSimulator.Core.Models;
 namespace SoapSimulator.Core.Services;
 
 public class SimulatorSoapService : ISoapService
