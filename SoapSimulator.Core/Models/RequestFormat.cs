@@ -9,6 +9,18 @@ public class RequestFormat
     public RequestFormat()
     {
         DateCreated = DateTime.Now;
+        Body =
+       """
+        <soapenv:Envelope     
+       	  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:syb="http://sybrin.co.za/soap">
+           <soapenv:Body>
+               <syb:ExecuteAction>           
+                   <syb:ActionName>{Example}</syb:ActionName>                   
+               </syb:ExecuteAction>
+           </soapenv:Body>
+       </soapenv:Envelope>
+       """;
     }
 
 }
