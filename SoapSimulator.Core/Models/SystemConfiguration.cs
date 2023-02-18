@@ -12,5 +12,6 @@ public class SystemConfiguration
     {
         Actions = new List<SoapAction>();
         Name = $"Config-{DateTime.Now:dd MMM yyyy H:mm}";
+        DateCreated = DateTime.Now;
     }
 }

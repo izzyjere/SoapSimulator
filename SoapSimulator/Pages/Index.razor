@@ -17,7 +17,7 @@
                     <MudTabs Border>
                         @foreach (var action in CurrentConfiguration.Actions)
                         {
-                            <MudTabPanel Text="@action.MethodName">
+                            <MudTabPanel ToolTip="@action.Description" Text="@action.MethodName">
                                 <MudRadioGroup SelectedOption="@action.Status" SelectedOptionChanged="(e)=>UpdateActionStatus(action,e)" Class="pa-4" T="ActionStatus">
                                     @foreach (var item in (ActionStatus[])Enum.GetValues(typeof(ActionStatus)))
                                     {

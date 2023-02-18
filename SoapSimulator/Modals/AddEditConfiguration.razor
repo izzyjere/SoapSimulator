@@ -58,7 +58,8 @@
     async void View(SoapAction record)
     {
         var dialog = dialogService.Show<AddEditSoapAction>("Edit Action", new DialogParameters { ["Model"] = record, ["View"] = true }, new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true });
-        var result = await dialog.Result;      
+        var result = await dialog.Result;
+        StateHasChanged();
     }
     void Error() => snackBar.Add("Fill in all required fields", Severity.Error);
     async Task Save()
@@ -70,6 +71,7 @@
         }
         if(IsEditing)
         {
+            Model.DateCreated = DateTime.Now;
             var updated = await configurationService.UpdateConfigurationAsync(Model);
             if(updated)
             {
