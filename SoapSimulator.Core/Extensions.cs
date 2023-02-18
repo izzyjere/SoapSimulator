@@ -13,6 +13,7 @@ public static class Extensions
             options.UseSqlite("Data Source = sysConfig.db", o =>
             {
                 o.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName);
+                o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
             });
         });
         services.AddScoped<IConfigurationService, ConfigurationService>();

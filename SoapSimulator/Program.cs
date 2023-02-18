@@ -14,7 +14,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSoapSimulatorCore();
 builder.Services.AddMudServices();
 builder.Services.AddSoapCore();
-
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -26,13 +26,19 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+app.UseCors(policyBuilder =>
+{
+    policyBuilder.AllowAnyHeader();
+    policyBuilder.AllowAnyMethod();
+    policyBuilder.AllowAnyOrigin();
+});
 app.UseStaticFiles();
 app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.UseEndpoints(endpoints =>
 {
-    endpoints.UseSoapEndpoint<ISoapService>("/soapsimulator.asmx", new SoapEncoderOptions(), SoapSerializer.DataContractSerializer);
+    endpoints.UseSoapEndpoint<ISoapService>("/Service.asmx", new SoapEncoderOptions(), SoapSerializer.DataContractSerializer);
 });
 app.Run();
