@@ -42,8 +42,8 @@ public class ActionService : IActionService
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message+ e.StackTrace);
-            return null;
+           Console.WriteLine(e.Message + e.StackTrace);
+            return ActionResponse.Failure(e.Message);
         }    
         
     }

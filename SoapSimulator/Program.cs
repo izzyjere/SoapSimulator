@@ -44,13 +44,11 @@ app.UseEndpoints(endpoints =>
     endpoints.UseSoapEndpoint<ISoapService>(options =>
     {
         options.Path = "/soap";
-        options.IndentXml = true;      
+        options.IndentXml = true; 
         options.AdditionalEnvelopeXmlnsAttributes = new Dictionary<string, string>()
         {
              { "syb", "http://sybrin.com/soap" },
-             { "array", "http://schemas.microsoft.com/2003/10/Serialization/Arrays" },
-             { "xsi","http://www.w3.org/2001/XMLSchema-instance" },
-             { "xsd","http://www.w3.org/2001/XMLSchema" }
+             { "array", "http://schemas.microsoft.com/2003/10/Serialization/Arrays" } 
         };
     });
 

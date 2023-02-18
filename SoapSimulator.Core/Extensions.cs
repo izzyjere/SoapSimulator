@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Xml.Serialization;
+using System.Xml;
+
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +12,7 @@ using SoapSimulator.Core.Models;
 using SoapSimulator.Core.Services;
 
 namespace SoapSimulator.Core;
-public static class Extensions
+public static partial class Extensions
 {
     public static IServiceCollection AddSoapSimulatorCore(this IServiceCollection services)
     {
@@ -53,4 +56,15 @@ public static class Extensions
         }
         return app;
     }
+
+    public static Stream ToStream(this string @this)
+    {
+        var stream = new MemoryStream();
+        var writer = new StreamWriter(stream);
+        writer.Write(@this);
+        writer.Flush();
+        stream.Position = 0;
+        return stream;
+    }
+
 }
