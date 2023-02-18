@@ -19,11 +19,13 @@
                         <HeaderContent>
                             <MudTh>Created On</MudTh>
                             <MudTh>Name</MudTh>
+                            <MudTh>Description</MudTh>
                             <MudTh>Actions</MudTh>
                         </HeaderContent>
                         <RowTemplate>
                             <MudTd DataLabel="Created On">@secordContext.DateCreated.ToString("dd MMM yyyy H:mm")</MudTd>
                             <MudTd DataLabel="Name">@secordContext.MethodName</MudTd>
+                            <MudTd DataLabel="Description">@secordContext.Description</MudTd>
                             <MudTd DataLabel="Actions">
                                 <MudIconButton Color="Color.Warning" Icon="@Icons.Material.Filled.TableView" OnClick="()=>View(secordContext)" />
                                 <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="()=>RemoveAction(secordContext)" />                              

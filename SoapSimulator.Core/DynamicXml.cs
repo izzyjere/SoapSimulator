@@ -146,8 +146,7 @@ public class DynamicXmlObject : DynamicObject, IXmlSerializable
 
     public static dynamic Deserialize(string xml)
     {
-        Console.WriteLine($"Deserializing XML:\n{xml}");
-
+        
         var doc = new XmlDocument();
         doc.LoadXml(xml);
 
