@@ -1,5 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using System.Text;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+
 using SoapCore;
 
 using SoapSimulator.Core.Models;
@@ -23,6 +27,9 @@ public static class Extensions
         services.AddScoped<ISoapService, SimulatorSoapService>();
         services.AddSingleton<ILogService, ActionLogService>();
         services.AddSoapExceptionTransformer((ex) => ex.Message);
+        //services.AddSoapServiceOperationTuner(new SoapOperationTuner());
+        services.AddSoapCore();
         return services;
     }
+  
 }

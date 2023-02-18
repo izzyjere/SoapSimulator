@@ -1,4 +1,6 @@
-﻿using SoapSimulator.Core.Models;
+﻿using System.Runtime.Serialization;
+
+using SoapSimulator.Core.Models;
 namespace SoapSimulator.Core.Services;
 
 public class SimulatorSoapService : ISoapService
@@ -18,10 +20,9 @@ public class SimulatorSoapService : ISoapService
         return "Hello world. " + msg;
     }
 
-    public IActionResponse ExecuteAction(ActionParameter parameter)
+    public ActionResponse ExecuteAction(string ActionName)
     {
-        logService.Log("", "Called.");
-        return actionService.ExecuteAction(parameter.ActionName);
+       return actionService.ExecuteAction(ActionName);
     }
 
 }

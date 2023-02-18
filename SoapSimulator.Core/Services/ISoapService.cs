@@ -7,7 +7,7 @@ namespace SoapSimulator.Core.Services;
 public interface ISoapService
 {
     [OperationContract]
-    IActionResponse ExecuteAction(ActionParameter parameter);
+    ActionResponse ExecuteAction(string ActionName);
     [OperationContract]
     string Ping(string msg);
 }

@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+
 using MudBlazor.Services;
+
 using SoapCore;
+
 using SoapSimulator.Core;
 using SoapSimulator.Core.Services;
 
@@ -13,7 +16,6 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSoapSimulatorCore();
 builder.Services.AddMudServices();
-builder.Services.AddSoapCore();
 builder.Services.AddCors();
 
 var app = builder.Build();
@@ -39,7 +41,16 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.UseEndpoints(endpoints =>
 {
-    endpoints.UseSoapEndpoint<ISoapService>("/Service.svc", new SoapEncoderOptions(), SoapSerializer.DataContractSerializer);
-    endpoints.UseSoapEndpoint<ISoapService>("/Service.asmx", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
+    endpoints.UseSoapEndpoint<ISoapService>(options =>
+    {
+        options.Path = "/Service.svc";
+        options.IndentXml = true;      
+        options.AdditionalEnvelopeXmlnsAttributes = new Dictionary<string, string>()
+        {
+             { "syb", "http://sybrin.com/soap" },
+             { "array", "http://schemas.microsoft.com/2003/10/Serialization/Arrays" }
+        };
+    });
+
 });
 app.Run();

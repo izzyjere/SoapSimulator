@@ -18,7 +18,7 @@
                         @foreach (var action in CurrentConfiguration.Actions)
                         {
                             <MudTabPanel Text="@action.MethodName">
-                                <MudRadioGroup SelectedOptionChanged="(e)=>UpdateActionStatus(action,e)" Class="pa-4" T="ActionStatus">
+                                <MudRadioGroup SelectedOption="@action.Status" SelectedOptionChanged="(e)=>UpdateActionStatus(action,e)" Class="pa-4" T="ActionStatus">
                                     @foreach (var item in (ActionStatus[])Enum.GetValues(typeof(ActionStatus)))
                                     {
                                         <MudRadio Color="GetColor(item)" Placement="Placement.Right" Option="item">@item.ToString()</MudRadio><br/>
@@ -86,7 +86,8 @@
 
     async void UpdateActionStatus(SoapAction action,ActionStatus status)
     {
-        await configurationService.UpdateActionStatus(action.Id, status);
+        action.Status = status;
+        await configurationService.UpdateActionAsync(action);
         StateHasChanged();
     }
 }

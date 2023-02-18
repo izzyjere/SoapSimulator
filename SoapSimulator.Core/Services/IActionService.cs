@@ -3,6 +3,6 @@
 namespace SoapSimulator.Core.Services;
 public interface IActionService
 {
-    IActionResponse ExecuteAction(string actionName);
+    ActionResponse ExecuteAction(string actionName);
 
 }

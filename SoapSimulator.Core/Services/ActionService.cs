@@ -16,24 +16,34 @@ public class ActionService : IActionService
         this.logService = logService;
     }
 
-    public IActionResponse ExecuteAction(string actionName)
+    public ActionResponse ExecuteAction(string actionName)
     {
-        var action = _db.SoapActions.FirstOrDefault(x => x.MethodName== actionName);
-        if(action == null)
+        try
         {
-            logService.Log(nameof(ActionService), $"Action '{actionName}' not found.");
-            return ActionResponse.Failure("Action not found.");
+            var action = _db.SoapActions.FirstOrDefault(x => x.MethodName == actionName);
+            if (action == null)
+            {
+                logService.Log(nameof(ActionService), $"Action '{actionName}' not found.");
+                return ActionResponse.Failure("Action not found.");
+            }
+            logService.Log(nameof(ActionService), $"Executing action {actionName}");
+
+            var result = action.Status switch
+            {
+                ActionStatus.Success => ActionResponse.Success(action.Response.Body),
+                ActionStatus.Failure => throw new Exception("Action is set to fail"),
+                ActionStatus.NoResponse => ActionResponse.Success("", "No records found."),
+                ActionStatus.NotFound => ActionResponse.Failure("Action not found."),
+                _ => ActionResponse.Success(action.Response.Body)
+
+            };
+            return result;
         }
-        logService.Log(nameof(ActionService),$"Executing action {actionName}");
-
-        return action.Status switch
+        catch (Exception e)
         {
-            ActionStatus.Success => ActionResponse.Success(action.Response.Body),
-            ActionStatus.Failure => throw new Exception("Action is set to fail"),
-            ActionStatus.NoResponse => ActionResponse.Success("","No records found."),
-            ActionStatus.NotFound => ActionResponse.Failure("Action not found."),
-            _ => ActionResponse.Success(action.Response.Body)
-
-        };    
+            Console.WriteLine(e.Message+ e.StackTrace);
+            return null;
+        }    
+        
     }
 }

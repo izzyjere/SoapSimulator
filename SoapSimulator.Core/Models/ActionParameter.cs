@@ -1,19 +1,19 @@
 ﻿using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace SoapSimulator.Core.Models;
-
-[DataContract]
+[DataContract(Namespace = "http://sybrin.com/soap")]
 public class ActionParameter
 {
     [DataMember]
     public string ActionName { get; set; }
     [DataMember]
-    public List<Parameter> Parameters { get; set; }   
+    public List<Parameter>? Parameters { get; set; }   
 }
-[DataContract]
+[DataContract(Namespace = "http://sybrin.com/soap")]
 public class Parameter
 {
-    [DataMember]
+    [SoapAttribute]
     public string Name { get; set; }
     [DataMember]
     public object Value { get; set; }

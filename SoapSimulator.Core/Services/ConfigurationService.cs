@@ -8,10 +8,12 @@ public class ConfigurationService : IConfigurationService
 {
     readonly DatabaseContext _db;
     readonly IWebHostEnvironment _environment;
-    public ConfigurationService(DatabaseContext db, IWebHostEnvironment environment)
+    readonly ILogService logService;
+    public ConfigurationService(DatabaseContext db, IWebHostEnvironment environment, ILogService logService)
     {
         _db = db;
         _environment = environment;
+        this.logService = logService;
     }
 
     public async Task<bool> DeleteConfigurationAsync(SystemConfiguration configuration)
@@ -24,14 +26,14 @@ public class ConfigurationService : IConfigurationService
         _db.SystemConfigurations.Remove(configuration);
         return await _db.SaveChangesAsync() != 0;
     }
-    public async Task UpdateActionStatus(Guid actionId, ActionStatus status)
+    public async Task UpdateActionAsync(SoapAction action)   
     {
-        var action = await _db.SoapActions.FirstOrDefaultAsync(a => a.Id == actionId);
+       
         if (action != null)
         {
-            action.Status = status;
             _db.SoapActions.Update(action);
             await _db.SaveChangesAsync();
+            logService.Log(nameof(ConfigurationService), $"Action {action.MethodName} updated.");
         }
 
     }
