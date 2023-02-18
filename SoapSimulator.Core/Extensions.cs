@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Text;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using SoapCore;
@@ -22,12 +19,12 @@ public static class Extensions
                 o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
             });
         });
+        services.AddSingleton<ILogService, ActionLogService>();
         services.AddScoped<IConfigurationService, ConfigurationService>();
         services.AddScoped<IActionService, ActionService>();
-        services.AddScoped<ISoapService, SimulatorSoapService>();
-        services.AddSingleton<ILogService, ActionLogService>();
+        services.AddScoped<ISoapService, SimulatorSoapService>();        
         services.AddSoapExceptionTransformer((ex) => ex.Message);
-        //services.AddSoapServiceOperationTuner(new SoapOperationTuner());
+        services.AddSoapServiceOperationTuner<SoapOperationTuner>();
         services.AddSoapCore();
         return services;
     }

@@ -21,7 +21,7 @@
                                 <MudRadioGroup SelectedOption="@action.Status" SelectedOptionChanged="(e)=>UpdateActionStatus(action,e)" Class="pa-4" T="ActionStatus">
                                     @foreach (var item in (ActionStatus[])Enum.GetValues(typeof(ActionStatus)))
                                     {
-                                        <MudRadio Color="GetColor(item)" Placement="Placement.Right" Option="item">@item.ToString()</MudRadio><br/>
+                                        <MudRadio Color="GetColor(item)" Placement="Placement.Right" Option="item">@item.ToString().Replace("_"," ")</MudRadio><br/>
                                     }
                                 </MudRadioGroup>
                             </MudTabPanel>
@@ -79,8 +79,8 @@
     Color GetColor(ActionStatus status) => status switch{
         ActionStatus.Failure => Color.Error,
         ActionStatus.Success => Color.Success,
-        ActionStatus.NoResponse => Color.Info,
-        ActionStatus.NotFound => Color.Warning,
+        ActionStatus.No_Response => Color.Info,
+        ActionStatus.Not_Found => Color.Warning,
         _ => Color.Default
     };
 

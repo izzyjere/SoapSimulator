@@ -32,8 +32,8 @@ public class ActionService : IActionService
             {
                 ActionStatus.Success => ActionResponse.Success(action.Response.Body),
                 ActionStatus.Failure => throw new Exception("Action is set to fail"),
-                ActionStatus.NoResponse => ActionResponse.Success("", "No records found."),
-                ActionStatus.NotFound => ActionResponse.Failure("Action not found."),
+                ActionStatus.No_Response => ActionResponse.Success("", "No records found."),
+                ActionStatus.Not_Found => ActionResponse.Failure("Action not found."),
                 _ => ActionResponse.Success(action.Response.Body)
 
             };
