@@ -31,8 +31,8 @@ public class ConfigurationService : IConfigurationService
        
         if (action != null)
         {
-            action.Response.XMLFileName = await SaveXSD(action.Response.Body);
-            action.Request.XMLFileName = await SaveXSD(action.Request.Body);
+            action.Response.XMLFileName = await SaveXSD(action.Response.Body,action.Response.XMLFileName);
+            action.Request.XMLFileName = await SaveXSD(action.Request.Body,action.Request.XMLFileName);
             _db.SoapActions.Update(action);
             await _db.SaveChangesAsync();
             logService.Log(nameof(ConfigurationService), $"Action {action.MethodName} updated.");
@@ -94,9 +94,12 @@ public class ConfigurationService : IConfigurationService
         }
         return Task.CompletedTask;
     }
-    private Task<string> SaveXSD(string xsd)
-    {
-        var fileName = Path.GetRandomFileName().Replace(".", "_") + ".xml";
+    private Task<string> SaveXSD(string xsd, string fileName="")
+    {   
+        if(string.IsNullOrEmpty(fileName))
+        {
+            fileName = Path.GetRandomFileName().Replace(".", "_") + ".xml";
+        }       
         var path = Path.Combine(_environment.WebRootPath, "xml", fileName);
         File.WriteAllText(path, xsd);
         return Task.FromResult(fileName);
