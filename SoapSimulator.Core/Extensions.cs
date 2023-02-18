@@ -19,7 +19,8 @@ public static class Extensions
             });
         });
         services.AddScoped<IConfigurationService, ConfigurationService>();
-        services.AddSingleton<ISoapService, SimulatorSoapService>();
+        services.AddScoped<IActionService, ActionService>();
+        services.AddScoped<ISoapService, SimulatorSoapService>();
         services.AddSingleton<ILogService, ActionLogService>();
         services.AddSoapExceptionTransformer((ex) => ex.Message);
         return services;

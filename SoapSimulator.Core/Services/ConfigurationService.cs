@@ -18,8 +18,8 @@ public class ConfigurationService : IConfigurationService
     {
         configuration.Actions.ForEach(async action =>
         {
-            await DeleteXSD(action.Request.XSDPath);
-            await DeleteXSD(action.Response.XSDPath);
+            await DeleteXSD(action.Request.XMLPath);
+            await DeleteXSD(action.Response.XMLPath);
         });
         _db.SystemConfigurations.Remove(configuration);
         return await _db.SaveChangesAsync() !=0;
@@ -41,8 +41,8 @@ public class ConfigurationService : IConfigurationService
     {
         configuration.Actions.ForEach(async action =>
         {
-            action.Response.XSDPath = await SaveXSD(action.Response.Body);
-            action.Request.XSDPath = await SaveXSD(action.Request.Body);
+            action.Response.XMLPath = await SaveXSD(action.Response.Body);
+            action.Request.XMLPath = await SaveXSD(action.Request.Body);
         });
         _db.SystemConfigurations.Add(configuration);
         return await _db.SaveChangesAsync()!=0;
@@ -63,7 +63,7 @@ public class ConfigurationService : IConfigurationService
     }
     public Task DeleteXSD(string fileName)
     {
-        var path = Path.Combine(_environment.WebRootPath, "xsd", fileName);
+        var path = Path.Combine(_environment.WebRootPath, "xml", fileName);
         if(File.Exists(path))
         {
             File.Delete(path);
@@ -72,8 +72,8 @@ public class ConfigurationService : IConfigurationService
     }
     private Task<string> SaveXSD(string xsd)
     {   
-        var fileName = Path.GetRandomFileName().Replace(".","_") + ".xsd";
-        var path = Path.Combine(_environment.WebRootPath, "xsd", fileName); 
+        var fileName = Path.GetRandomFileName().Replace(".","_") + ".xml";
+        var path = Path.Combine(_environment.WebRootPath, "xml", fileName); 
         File.WriteAllText(path, xsd);
         return Task.FromResult(fileName);
     }
