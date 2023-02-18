@@ -43,7 +43,7 @@ namespace SoapSimulator.Core.Migrations
 
                     b.HasIndex("SystemConfigurationId");
 
-                    b.ToTable("SoapActions");
+                    b.ToTable("SoapActions", (string)null);
                 });
 
             modelBuilder.Entity("SoapSimulator.Core.Models.SystemConfiguration", b =>
@@ -64,7 +64,7 @@ namespace SoapSimulator.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemConfigurations");
+                    b.ToTable("SystemConfigurations", (string)null);
                 });
 
             modelBuilder.Entity("SoapSimulator.Core.Models.SoapAction", b =>
@@ -75,7 +75,7 @@ namespace SoapSimulator.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("SoapSimulator.Core.Models.RequestFormat", "Request", b1 =>
+                    b.OwnsOne("SoapSimulator.Core.Models.SoapAction.Request#SoapSimulator.Core.Models.RequestFormat", "Request", b1 =>
                         {
                             b1.Property<Guid>("ActionId")
                                 .HasColumnType("TEXT");
@@ -104,7 +104,7 @@ namespace SoapSimulator.Core.Migrations
                             b1.Navigation("Action");
                         });
 
-                    b.OwnsOne("SoapSimulator.Core.Models.ResponseFormat", "Response", b1 =>
+                    b.OwnsOne("SoapSimulator.Core.Models.SoapAction.Response#SoapSimulator.Core.Models.ResponseFormat", "Response", b1 =>
                         {
                             b1.Property<Guid>("ActionId")
                                 .HasColumnType("TEXT");

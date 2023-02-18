@@ -8,11 +8,11 @@ public class ConfigurationService : IConfigurationService
 {
     readonly DatabaseContext _db;
     readonly IWebHostEnvironment _environment;
-	public ConfigurationService(DatabaseContext db, IWebHostEnvironment environment)
-	{
-		_db= db;
+    public ConfigurationService(DatabaseContext db, IWebHostEnvironment environment)
+    {
+        _db = db;
         _environment = environment;
-	}
+    }
 
     public async Task<bool> DeleteConfigurationAsync(SystemConfiguration configuration)
     {
@@ -22,14 +22,25 @@ public class ConfigurationService : IConfigurationService
             await DeleteXSD(action.Response.XMLPath);
         });
         _db.SystemConfigurations.Remove(configuration);
-        return await _db.SaveChangesAsync() !=0;
+        return await _db.SaveChangesAsync() != 0;
+    }
+    public async Task UpdateActionStatus(Guid actionId, ActionStatus status)
+    {
+        var action = await _db.SoapActions.FirstOrDefaultAsync(a => a.Id == actionId);
+        if (action != null)
+        {
+            action.Status = status;
+            _db.SoapActions.Update(action);
+            await _db.SaveChangesAsync();
+        }
+
     }
 
     public async Task<SystemConfiguration> GetCurrentConfigurationAsync()
     {
         return await _db.SystemConfigurations
-                        .Include(c=>c.Actions)
-                        .FirstOrDefaultAsync(c=>c.IsCurrent);
+                        .Include(c => c.Actions)
+                        .FirstOrDefaultAsync(c => c.IsCurrent);
     }
 
     public async Task<IEnumerable<SystemConfiguration>> GetAllConfigurationsAsync()
@@ -45,7 +56,7 @@ public class ConfigurationService : IConfigurationService
             action.Request.XMLPath = await SaveXSD(action.Request.Body);
         });
         _db.SystemConfigurations.Add(configuration);
-        return await _db.SaveChangesAsync()!=0;
+        return await _db.SaveChangesAsync() != 0;
     }
 
     public async Task<bool> SetCurrentConfigurationAsync(SystemConfiguration configuration)
@@ -58,22 +69,22 @@ public class ConfigurationService : IConfigurationService
             await _db.SaveChangesAsync();
         }
         else { }
-        configuration.IsCurrent = true;       
+        configuration.IsCurrent = true;
         return await UpdateConfigurationAsync(configuration);
     }
     public Task DeleteXSD(string fileName)
     {
         var path = Path.Combine(_environment.WebRootPath, "xml", fileName);
-        if(File.Exists(path))
+        if (File.Exists(path))
         {
             File.Delete(path);
         }
         return Task.CompletedTask;
     }
     private Task<string> SaveXSD(string xsd)
-    {   
-        var fileName = Path.GetRandomFileName().Replace(".","_") + ".xml";
-        var path = Path.Combine(_environment.WebRootPath, "xml", fileName); 
+    {
+        var fileName = Path.GetRandomFileName().Replace(".", "_") + ".xml";
+        var path = Path.Combine(_environment.WebRootPath, "xml", fileName);
         File.WriteAllText(path, xsd);
         return Task.FromResult(fileName);
     }
