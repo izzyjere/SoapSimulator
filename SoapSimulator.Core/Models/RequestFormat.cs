@@ -17,7 +17,7 @@ public class RequestFormat
              xmlns:syb="http://sybrin.co.za/soap">
            <soapenv:Body>
                <syb:ExecuteAction>           
-                   <syb:ActionName>{Example}</syb:ActionName>                   
+                   <syb:ActionName>{ExampleAction}</syb:ActionName>                   
                </syb:ExecuteAction>
            </soapenv:Body>
        </soapenv:Envelope>
