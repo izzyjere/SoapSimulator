@@ -31,6 +31,8 @@ public class ConfigurationService : IConfigurationService
        
         if (action != null)
         {
+            action.Response.XMLFileName = await SaveXSD(action.Response.Body);
+            action.Request.XMLFileName = await SaveXSD(action.Request.Body);
             _db.SoapActions.Update(action);
             await _db.SaveChangesAsync();
             logService.Log(nameof(ConfigurationService), $"Action {action.MethodName} updated.");
@@ -52,6 +54,15 @@ public class ConfigurationService : IConfigurationService
 
     public async Task<bool> SaveConfigurationAsync(SystemConfiguration configuration)
     {
+        if (configuration.IsCurrent)
+        {
+            foreach (var item in _db.SystemConfigurations.Where(c => c.IsCurrent))
+            {
+                item.IsCurrent = false;
+                _db.SystemConfigurations.Update(item);
+            }
+        }
+        else { }
         configuration.Actions.ForEach(async action =>
         {
             action.Response.XMLFileName = await SaveXSD(action.Response.Body);
@@ -92,6 +103,15 @@ public class ConfigurationService : IConfigurationService
     }
     public async Task<bool> UpdateConfigurationAsync(SystemConfiguration configuration)
     {
+        if(configuration.IsCurrent)
+        {
+            foreach (var item in _db.SystemConfigurations.Where(c=>c.IsCurrent && c.Id!=configuration.Id))
+            {
+                item.IsCurrent = false;
+               _db.SystemConfigurations.Update(item);
+            }
+        }
+        else { }
         _db.SystemConfigurations.Update(configuration);
         return await _db.SaveChangesAsync() != 0;
     }
