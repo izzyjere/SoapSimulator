@@ -19,8 +19,18 @@ public class SimulatorSoapService : ISoapService
     }
 
     public ActionResponse ExecuteAction(string ActionName)
-    {
-       return actionService.ExecuteAction(ActionName);
+    { 
+       var response = actionService.ExecuteAction(ActionName);
+        try
+        {
+            if (response == null)
+            {
+                throw new HttpRequestException($"Action {ActionName} is set fail.");
+            }
+        }
+        catch (Exception){ }   
+      
+        return response;
     }
 
 }

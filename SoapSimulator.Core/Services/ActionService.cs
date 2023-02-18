@@ -16,7 +16,7 @@ public class ActionService : IActionService
         this.logService = logService;
     }
 
-    public ActionResponse ExecuteAction(string actionName)
+    public ActionResponse? ExecuteAction(string actionName)
     {
         try
         {
@@ -31,7 +31,7 @@ public class ActionService : IActionService
             var result = action.Status switch
             {
                 ActionStatus.Success => ActionResponse.Success(action.Response.Body),
-                ActionStatus.Failure => throw new Exception("Action is set to fail"),
+                ActionStatus.Failure => null,
                 ActionStatus.No_Response => ActionResponse.Success("", "No records found."),
                 ActionStatus.Not_Found => ActionResponse.Failure("Action not found."),
                 _ => ActionResponse.Success(action.Response.Body)
