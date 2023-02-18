@@ -6,6 +6,8 @@ public class SoapAction
     public DateTime DateCreated { get; set; }
     [Required]    
     public string MethodName { get; set; }
+    [Required]    
+    public string Description { get; set; }
     public RequestFormat Request { get; set; }
     public ResponseFormat Response { get; set; }
     public ActionStatus Status { get; set; }

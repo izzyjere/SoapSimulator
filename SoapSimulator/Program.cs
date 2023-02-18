@@ -48,9 +48,12 @@ app.UseEndpoints(endpoints =>
         options.AdditionalEnvelopeXmlnsAttributes = new Dictionary<string, string>()
         {
              { "syb", "http://sybrin.com/soap" },
-             { "array", "http://schemas.microsoft.com/2003/10/Serialization/Arrays" }
+             { "array", "http://schemas.microsoft.com/2003/10/Serialization/Arrays" },
+             { "xsi","http://www.w3.org/2001/XMLSchema-instance" },
+             { "xsd","http://www.w3.org/2001/XMLSchema" }
         };
     });
 
 });
+app.MigrateDatabase();
 app.Run();

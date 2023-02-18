@@ -1,8 +1,0 @@
-<Account>
-  <AccountNumber>1234567890</AccountNumber>
-  <Status>Active</Status>
-  <CustomerName>John Doe</CustomerName>
-  <Type>Savings</Type>
-  <Address>123 Main St.</Address>
-  <BranchCode>ABC123</BranchCode>
-</Account>
