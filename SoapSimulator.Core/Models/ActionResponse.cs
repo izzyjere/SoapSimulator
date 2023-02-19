@@ -1,11 +1,9 @@
 ﻿using System.Runtime.Serialization;
 using System.ServiceModel;
 
-using static SoapSimulator.Core.Extensions;
-
 namespace SoapSimulator.Core.Models;
 
-[DataContract(Namespace = "http://sybrin.co.za/soap")]
+[DataContract(Namespace = "http://sybrin.co.za/SoapSimulator.Core")]
 [KnownType(typeof(DynamicXmlObject))]
 public class ActionResponse
 {

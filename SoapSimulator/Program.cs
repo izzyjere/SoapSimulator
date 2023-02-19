@@ -47,7 +47,7 @@ app.UseEndpoints(endpoints =>
         options.IndentXml = true; 
         options.AdditionalEnvelopeXmlnsAttributes = new Dictionary<string, string>()
         {
-             { "syb", "http://sybrin.com/soap" },
+             { "syb", "http://sybrin.com/SoapSimulator.Core" },
              { "array", "http://schemas.microsoft.com/2003/10/Serialization/Arrays" } 
         };
     });

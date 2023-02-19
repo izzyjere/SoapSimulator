@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 
 namespace SoapSimulator.Core.Models;
-[DataContract(Namespace = "http://sybrin.com/soap")]
+[DataContract(Namespace = "http://sybrin.co.za/SoapSimulator.Core")]
 public class ActionParameter
 {
     [DataMember]
@@ -10,7 +10,7 @@ public class ActionParameter
     [DataMember]
     public List<Parameter>? Parameters { get; set; }   
 }
-[DataContract(Namespace = "http://sybrin.com/soap")]
+[DataContract(Namespace = "http://sybrin.co.za/SoapSimulator.Core")]
 public class Parameter
 {
     [SoapAttribute]
