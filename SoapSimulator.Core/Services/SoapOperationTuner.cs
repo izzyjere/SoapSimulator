@@ -21,7 +21,17 @@ public class SoapOperationTuner : IServiceOperationTuner
             if (httpContext.Request.Headers.TryGetValue("User-Agent", out paramValue))
             {
                 var userAgent = paramValue[0];
-                logService.Log(nameof(SoapOperationTuner),$"New request from {userAgent}");
+                logService.Log(nameof(SoapOperationTuner),$"Execute action request from {userAgent}");
+            }
+
+        } 
+        if (operation.Name.Equals("Ping"))
+        {
+            StringValues paramValue;
+            if (httpContext.Request.Headers.TryGetValue("User-Agent", out paramValue))
+            {
+                var userAgent = paramValue[0];
+                logService.Log(nameof(SoapOperationTuner),$"Ping request from {userAgent}");
             }
 
         }

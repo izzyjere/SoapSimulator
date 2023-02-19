@@ -94,6 +94,7 @@
     {
         action.Status = status;
         await configurationService.UpdateActionAsync(action);
+        logService.Log(nameof(UpdateActionStatus), $"{action.MethodName} set to {status.ToString().Replace("_", "")}");
         StateHasChanged();
     }
 }

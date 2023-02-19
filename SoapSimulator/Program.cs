@@ -45,9 +45,11 @@ app.UseEndpoints(endpoints =>
     {
         options.Path = "/soap";
         options.IndentXml = true; 
+        options.HttpGetEnabled= true;
         options.AdditionalEnvelopeXmlnsAttributes = new Dictionary<string, string>()
         {
-             { "syb", "http://sybrin.com/SoapSimulator.Core" },
+             { "syb", "http://sybrin.co.za/SoapSimulator.Core" },
+             { "core", "http://schemas.datacontract.org/2004/07/SoapSimulator.Core" },
              { "array", "http://schemas.microsoft.com/2003/10/Serialization/Arrays" } 
         };
     });

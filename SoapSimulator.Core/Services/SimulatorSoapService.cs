@@ -12,10 +12,9 @@ public class SimulatorSoapService : ISoapService
         actionService = _actionService;
     }
 
-    public string Ping(string msg)
+    public string Ping(string Msg="")
     {
-        logService.Log(nameof(Ping), $"Ping from {msg}.");
-        return "Hello world. " + msg;
+       return "Hello world. " + Msg;
     }
 
     public ActionResponse ExecuteAction(string ActionName)
