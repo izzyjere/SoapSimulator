@@ -3,10 +3,8 @@ using System.Xml.Serialization;
 
 namespace SoapSimulator.Core.Models;
 [DataContract(Namespace = "http://sybrin.co.za/SoapSimulator.Core")]
-public class ActionParameter
+public class ActionParameters
 {
-    [DataMember]
-    public string ActionName { get; set; }
     [DataMember]
     public List<Parameter>? Parameters { get; set; }   
 }
@@ -16,5 +14,5 @@ public class Parameter
     [SoapAttribute]
     public string Name { get; set; }
     [DataMember]
-    public object Value { get; set; }
+    public string Value { get; set; }
 }

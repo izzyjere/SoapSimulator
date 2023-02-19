@@ -7,7 +7,9 @@
 <MudLayout>
     <MudAppBar Style="background-color:white; color:var(--mud-palette-warning)" Elevation="25">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" /> 
-    </MudAppBar>
+         <MudSpacer/>
+         <MudLink Target="_blank" Href="soap?WSDL">View WSDL</MudLink>
+        </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Docked" Elevation="1">
         <MudDrawerHeader>
             <MudText Typo="Typo.h6">SOAP Server</MudText>

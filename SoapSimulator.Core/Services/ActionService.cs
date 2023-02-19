@@ -24,7 +24,7 @@ public class ActionService : IActionService
             if (action == null)
             {
                 logService.Log(nameof(ActionService), $"Action '{actionName}' not found.");
-                return ActionResponse.Failure("Action not found.");
+                throw new HttpRequestException($"Action '{actionName}' not found.");
             }
             logService.Log(nameof(ActionService), $"Executing action {actionName}");
 
@@ -32,7 +32,7 @@ public class ActionService : IActionService
             {
                 ActionStatus.Success => ActionResponse.Success(action.Response.Body),
                 ActionStatus.Failure => null,
-                ActionStatus.No_Response => ActionResponse.Success("<Content></Content>", "No records found."),
+                ActionStatus.No_Response => ActionResponse.Success("<string>No records found</string>", "No records found."),
                 ActionStatus.Not_Found => ActionResponse.Failure("Action set to not found."),
                 _ => ActionResponse.Success(action.Response.Body)
 
