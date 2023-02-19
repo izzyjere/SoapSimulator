@@ -5,7 +5,7 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Style="background-color:white; color:var(--mud-palette-warning)" Elevation="25">
+    <MudAppBar Style="background-color:white; color:var(--mud-palette-primary)" Elevation="25">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" /> 
          <MudSpacer/>
          <MudLink Target="_blank" Href="soap?WSDL">View WSDL</MudLink>
@@ -17,7 +17,7 @@
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="my-8 pt-16">
+        <MudContainer MaxWidth="MaxWidth.Large" Class="my-8 pt-8">
             @Body
         </MudContainer>
     </MudMainContent>

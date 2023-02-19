@@ -12,7 +12,7 @@ using SoapSimulator.Core.Models;
 using SoapSimulator.Core.Services;
 
 namespace SoapSimulator.Core;
-public static partial class Extensions
+public static class Extension
 {
     public static IServiceCollection AddSoapSimulatorCore(this IServiceCollection services)
     {
@@ -51,19 +51,19 @@ public static partial class Extensions
             if (!actions.Any(a => a.Request.XMLFileName == Path.GetFileName(file)) && !actions.Any(a => a.Response.XMLFileName == Path.GetFileName(file)))
             {
                 File.Delete(file);
-                Console.WriteLine($"Delete useless file {file}");
+                Console.WriteLine($"Deleted useless file {file}");
             }
         }
         return app;
     }
 
-    public static Stream ToStream(this string @this)
+    public static Stream ToStream(this string @this, object origin)
     {
         var stream = new MemoryStream();
         var writer = new StreamWriter(stream);
         writer.Write(@this);
         writer.Flush();
-        stream.Position = 0;
+        stream.Position = 0;        
         return stream;
     }
 
