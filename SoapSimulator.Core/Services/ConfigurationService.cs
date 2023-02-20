@@ -115,6 +115,11 @@ public class ConfigurationService : IConfigurationService
             }
         }
         else { }
+        configuration.Actions.ForEach(async action =>
+        {
+            action.Response.XMLFileName = await SaveXSD(action.Response.Body);
+            action.Request.XMLFileName = await SaveXSD(action.Request.Body);
+        });
         _db.SystemConfigurations.Update(configuration);
         return await _db.SaveChangesAsync() != 0;
     }

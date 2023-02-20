@@ -1,0 +1,33 @@
+<Transactions>
+
+<Transaction>
+  <Date>2022-02-16T17:30:45</Date>
+  <CreditValueDate>2022-02-16T17:30:45</CreditValueDate>
+  <DebitValueDate>2022-02-16T17:30:45</DebitValueDate>
+  <CreditAmount>250.00</CreditAmount>
+  <DebitAccount>10010002</DebitAccount>
+  <CreditAccount>10010003</CreditAccount>
+  <Narration>Transfer to Savings</Narration>
+  <DestinationBankSortCode>BR003</DestinationBankSortCode>
+</Transaction>
+<Transaction>
+  <Date>2022-02-17T14:20:10</Date>
+  <CreditValueDate>2022-02-17T14:20:10</CreditValueDate>
+  <DebitValueDate>2022-02-17T14:20:10</DebitValueDate>
+  <CreditAmount>120.00</CreditAmount>
+  <DebitAccount>10010002</DebitAccount>
+  <CreditAccount>10010001</CreditAccount>
+  <Narration>ATM Withdrawal</Narration>
+  <DestinationBankSortCode>BR001</DestinationBankSortCode>
+</Transaction>
+<Transaction>
+  <Date>2022-02-18T09:12:34</Date>
+  <CreditValueDate>2022-02-18T09:12:34</CreditValueDate>
+  <DebitValueDate>2022-02-18T09:12:34</DebitValueDate>
+  <CreditAmount>2500.00</CreditAmount>
+  <DebitAccount>10010002</DebitAccount>
+  <CreditAccount>10010001</CreditAccount>
+  <Narration>Salary Payment</Narration>
+  <DestinationBankSortCode>BR001</DestinationBankSortCode>
+</Transaction>
+</Transactions>

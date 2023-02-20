@@ -10,20 +10,14 @@ using SoapCore;
 
 using SoapSimulator.Core.Models;
 using SoapSimulator.Core.Services;
+using Hangfire;
 
 namespace SoapSimulator.Core;
 public static class Extension
 {
     public static IServiceCollection AddSoapSimulatorCore(this IServiceCollection services)
     {
-        services.AddDbContext<DatabaseContext>(options =>
-        {
-            options.UseSqlite("Data Source = sysConfig.db", o =>
-            {
-                o.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName);
-                o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-            });
-        });
+        services.AddDbContext<DatabaseContext>();       
         services.AddSingleton<ILogService, ActionLogService>();
         services.AddScoped<IConfigurationService, ConfigurationService>();
         services.AddScoped<IActionService, ActionService>();
@@ -34,6 +28,8 @@ public static class Extension
         services.AddSoapCore();
         return services;
     }
+
+    
     public static IApplicationBuilder MigrateDatabase(this IApplicationBuilder app)
     {
         var scope = app.ApplicationServices.CreateScope();
@@ -44,17 +40,10 @@ public static class Extension
             throw new SystemException("No db context was registered");
         }
         context.Database.Migrate();
-        var actions = context.SoapActions.ToList();
         var folderPath = Path.Combine(env.WebRootPath, "xml");
-        var files = Directory.GetFiles(folderPath);
-        foreach (var file in files.Where(f => f.EndsWith(".xml")))
-        {
-            if (!actions.Any(a => a.Request.XMLFileName == Path.GetFileName(file)) && !actions.Any(a => a.Response.XMLFileName == Path.GetFileName(file)))
-            {
-                File.Delete(file);
-                Console.WriteLine($"Deleted useless file {file}");
-            }
-        }
+        #pragma warning disable CS0618 // Type or member is obsolete
+        RecurringJob.AddOrUpdate(()=>DeleteUnusableXMLFiles(folderPath), Cron.MinuteInterval(1));
+        #pragma warning restore CS0618 // Type or member is obsolete
         return app;
     }
 
@@ -67,5 +56,18 @@ public static class Extension
         stream.Position = 0;        
         return stream;
     }
-
+    public static void DeleteUnusableXMLFiles(string folderPath)
+    {
+        var context = new DatabaseContext();
+        var actions = context.SoapActions.ToList();        
+        var files = Directory.GetFiles(folderPath);
+        foreach (var file in files.Where(f => f.EndsWith(".xml")))
+        {
+            if (!actions.Any(a => a.Request.XMLFileName == Path.GetFileName(file)) && !actions.Any(a => a.Response.XMLFileName == Path.GetFileName(file)))
+            {
+                File.Delete(file);
+                Console.WriteLine($"Deleted UnusableXMLFiles file {file}");
+            }
+        }
+    }
 }

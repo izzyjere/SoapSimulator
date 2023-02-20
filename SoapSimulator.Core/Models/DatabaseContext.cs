@@ -1,11 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace SoapSimulator.Core.Models;
 public class DatabaseContext : DbContext
 {
+    public DatabaseContext()
+    {
+    }
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }   
     public virtual DbSet<SystemConfiguration> SystemConfigurations { get; set; }
     public virtual DbSet<SoapAction> SoapActions { get; set;}
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlite("Data Source = sysConfig.db", o =>
+        {
+            o.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName);
+            o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+        });
+        base.OnConfiguring(optionsBuilder);
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<SoapAction>(e =>

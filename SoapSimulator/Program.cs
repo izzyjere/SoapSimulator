@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Hangfire;
+using Hangfire.MemoryStorage;
 
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using MudBlazor.Services;
+using Newtonsoft.Json;
 
 using SoapCore;
-
 using SoapSimulator.Core;
 using SoapSimulator.Core.Services;
 
@@ -14,6 +16,12 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddHangfire(configuration => configuration
+            .UseSerializerSettings(new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            })
+            .UseMemoryStorage());
 builder.Services.AddSoapSimulatorCore();
 builder.Services.AddMudServices();
 builder.Services.AddCors();
@@ -44,16 +52,17 @@ app.UseEndpoints(endpoints =>
     endpoints.UseSoapEndpoint<ISoapService>(options =>
     {
         options.Path = "/soap";
-        options.IndentXml = true; 
-        options.HttpGetEnabled= true;
+        options.IndentXml = true;
+        options.HttpGetEnabled = true;
         options.AdditionalEnvelopeXmlnsAttributes = new Dictionary<string, string>()
         {
              { "syb", "http://sybrin.co.za/SoapSimulator.Core" },
              { "core", "http://schemas.datacontract.org/2004/07/SoapSimulator.Core" },
-             { "array", "http://schemas.microsoft.com/2003/10/Serialization/Arrays" } 
+             { "array", "http://schemas.microsoft.com/2003/10/Serialization/Arrays" }
         };
     });
 
 });
+app.UseHangfireServer();
 app.MigrateDatabase();
 app.Run();
