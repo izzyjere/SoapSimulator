@@ -27,7 +27,8 @@ public static class Extension
         services.AddSingleton<ILogService, ActionLogService>();
         services.AddScoped<IConfigurationService, ConfigurationService>();
         services.AddScoped<IActionService, ActionService>();
-        services.AddScoped<ISoapService, SimulatorSoapService>();        
+        services.AddScoped<ISoapService, SimulatorSoapService>();
+        services.AddScoped<IXMLValidator,XMLValidatorService>();
         services.AddSoapExceptionTransformer((ex) => ex.Message);
         services.AddSoapServiceOperationTuner<SoapOperationTuner>();
         services.AddSoapCore();

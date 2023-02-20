@@ -1,4 +1,4 @@
-﻿<EditForm Model="@Model" OnInvalidSubmit="Error" OnValidSubmit="Save">
+﻿<EditForm Model="@Model" OnInvalidSubmit='()=>Error("Fill in all required fields")' OnValidSubmit="Save">
     <DataAnnotationsValidator />
     <MudDialog>
         <DialogContent>
@@ -41,19 +41,31 @@
             Model = new();
         }
     }
-    void Error() => snackBar.Add("Fill in all required fields", Severity.Error);
+    void Error(string error) => snackBar.Add(error, Severity.Error);
     async Task Save()
     {   
 
         Model.MethodName = Model.MethodName.Trim();
         if (string.IsNullOrEmpty(Model.Response.Body))
         {
-            Error();
+            Error("Please provide a sample response xml.");
             return;
         }
         if (string.IsNullOrEmpty(Model.Request.Body))
         {
-            Error();
+            Error("Please provide a sample request xml.");
+            return;
+        }
+        var validateReq = xmlValidator.IsValidXml(Model.Request.Body);
+        var validateRes = xmlValidator.IsValidXml(Model.Response.Body);
+        if (!validateReq.IsValid)
+        {
+            Error("Request XML Error: " + validateReq.Message);
+            return;
+        } 
+        if (!validateRes.IsValid)
+        {
+            Error("Response XML Error: " + validateRes.Message);
             return;
         }
         if (View)
