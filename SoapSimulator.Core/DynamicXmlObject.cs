@@ -21,13 +21,13 @@ public class DynamicXmlObject : DynamicObject, IXmlSerializable
         _properties = properties;
     }
 
-    public override bool TrySetMember(SetMemberBinder binder, object value)
+    public override bool TrySetMember(SetMemberBinder binder, object? value)
     {
-        _properties[binder.Name] = value;
+        _properties[binder.Name] = value ?? string.Empty;
         return true;
     }
 
-    public override bool TryGetMember(GetMemberBinder binder, out object result)
+    public override bool TryGetMember(GetMemberBinder binder, out object? result)
     {
         if (_properties.TryGetValue(binder.Name, out result))
         {
@@ -57,12 +57,12 @@ public class DynamicXmlObject : DynamicObject, IXmlSerializable
 
                 if (reader.IsEmptyElement)
                 {
-                    _properties[reader.LocalName] = null;
+                    _properties[reader.LocalName] = string.Empty;
                     reader.Read();
                 }
                 else if (reader.GetAttribute("type") == "null")
                 {
-                    _properties[reader.LocalName] = null;
+                    _properties[reader.LocalName] = string.Empty;
                     reader.ReadStartElement();
                 }
                 else
@@ -150,8 +150,7 @@ public class DynamicXmlObject : DynamicObject, IXmlSerializable
         var doc = new XmlDocument();
         doc.LoadXml(xml);
 
-        var root = doc.DocumentElement;
-
+        var root = doc.DocumentElement;      
         if (root.HasAttributes)
         {
             var dict = new Dictionary<string, object>();
