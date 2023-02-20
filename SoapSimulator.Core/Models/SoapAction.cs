@@ -20,9 +20,9 @@ public class SoapAction
     }
     [NotMapped]
     public bool ShowSample { get; set; }
-    public ResponseFormat GetResponse()
-    {
-        return Responses.FirstOrDefault(r => r.ActionStatus == Status);
+    public ResponseFormat GetResponse(ActionStatus status)    {
+       
+        return Responses.FirstOrDefault(r => r.ActionStatus == status);
     }
 
 }

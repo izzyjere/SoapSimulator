@@ -2,23 +2,17 @@
 
 public class XMLValidatorService : IXMLValidator
 {
-    public Task<string> Validate(string xml, string xsd)
+    public XMLValidationResponse IsValidXml(string xmlString)
     {
         try
         {
-            XmlReaderSettings Xsettings = new XmlReaderSettings();
-            Xsettings.Schemas.Add(null, xsd);
-            Xsettings.ValidationType = ValidationType.Schema;
-            XmlDocument document = new();
-            document.LoadXml(xml);
-            XmlReader reader = XmlReader.Create(new StringReader(document.InnerXml), Xsettings);
-            while (reader.Read());
-            return Task.FromResult(string.Empty);
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xmlString);
+            return new XMLValidationResponse(true);
         }
-        catch (Exception e)
+        catch (XmlException e)
         {
-            Console.WriteLine(e.Message + e.StackTrace);   
-            return Task.FromResult("Invalid XML!!");
+            return new XMLValidationResponse(false, e.Message);
         }
     }
 }

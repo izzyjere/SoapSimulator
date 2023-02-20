@@ -12,10 +12,18 @@
                 <MudItem xs="12">
                     <MudText Align="Align.Center" Typo="Typo.h6">Request Format</MudText>
                     <MudDivider />
-                    <MudTextField ReadOnly Required Lines="6" @bind-Value="@Model.Request.Body" Variant="Variant.Outlined" Label="Enter sample request XML." />
+                    <MudTextField ReadOnly Required Lines="10" @bind-Value="@Model.Request.Body" Variant="Variant.Outlined" Label="Enter sample request XML." />
                 </MudItem>
                 <MudItem xs="12">
-                    
+                    <MudText Align="Align.Center" Typo="Typo.h6">Configure Action Responses</MudText>
+                    <MudChipSet>
+                        <center>
+                            @foreach (var status in (ActionStatus[])Enum.GetValues(typeof(ActionStatus)))
+                            {
+                                <MudChip OnClick="()=>ConfigureResponse(status)" IconColor="Color.Success" Icon='@(Model.GetResponse(status)!=null?Icons.Material.Filled.DoneAll:"")'>@status.ToString().Replace("_"," ")</MudChip>
+                            }
+                        </center>
+                    </MudChipSet>
                 </MudItem>
             </MudGrid>
         </DialogContent>
@@ -32,36 +40,77 @@
     public SoapAction? Model { get; set; }
     [Parameter]
     public bool View { get; set; }
+    Dictionary<ActionStatus, string> responses;
     protected override void OnInitialized()
     {
         if (!View)
         {
             Model = new();
+            responses = new();
+        }
+        else
+        {
+            responses = new Dictionary<ActionStatus, string>();
+            foreach (var response in Model.Responses)
+            {
+                responses[response.ActionStatus] = response.Body;
+            }
         }
     }
+    async void ConfigureResponse(ActionStatus status)
+    {
+        if (Model.GetResponse(status) == null)
+        {
+            var dialog = dialogService.Show<AddEditResponse>($"{status.ToString().Replace("_", "")} Response for {Model.MethodName}", new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true });
+            var result = await dialog.Result;
+            if (!result.Cancelled)
+            {
+                responses[status] = result.ToString();
+                StateHasChanged();
+            }
+        }
+    }
+
     void Error(string error) => snackBar.Add(error, Severity.Error);
     async Task Save()
-    {   
-
-        Model.MethodName = Model.MethodName.Trim();      
+    {
+        if (responses.Count < 5)
+        {
+            Error("Some of the responses havenot been configured.");
+            return;
+        }
+        Model.MethodName = Model.MethodName.Trim();
         if (string.IsNullOrEmpty(Model.Request.Body))
         {
             Error("Please provide a sample request xml.");
             return;
         }
-        var validateReq = xmlValidator.IsValidXml(Model.Request.Body);      
+        var validateReq = xmlValidator.IsValidXml(Model.Request.Body);
         if (!validateReq.IsValid)
         {
             Error("Request XML Error: " + validateReq.Message);
             return;
-        }         
+        }
         if (View)
         {
+            Model.Responses.Clear();
+            foreach (var item in responses)
+            {
+                Model.Responses.Add(new ResponseFormat { ActionStatus = item.Key, Body = item.Value });
+            }
             await configurationService.UpdateActionAsync(Model);
-            snackBar.Add($"Action {Model.MethodName} updated.",Severity.Success);
+            snackBar.Add($"Action {Model.MethodName} updated.", Severity.Success);
             Dialog.Close(null);
             return;
         }
-        Dialog.Close(Model);
+        else
+        {
+            foreach (var item in responses)
+            {
+                Model.Responses.Add(new ResponseFormat { ActionStatus = item.Key, Body = item.Value });
+            }
+            Dialog.Close(Model);
+        }
+
     }
 }

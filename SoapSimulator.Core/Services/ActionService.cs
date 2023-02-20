@@ -27,7 +27,7 @@ public class ActionService : IActionService
             var result = action.Status switch
             {
                 ActionStatus.Failure => null,               
-                _ => ActionResponse.Success(action.GetResponse().Body)
+                _ => ActionResponse.Success(action.GetResponse(action.Status).Body)
 
             };
             logService.Log(nameof(ActionService), $"Executed action {actionName} successfully.");
