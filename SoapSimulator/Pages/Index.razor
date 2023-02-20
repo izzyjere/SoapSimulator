@@ -24,10 +24,10 @@
                                         <MudRadio Color="GetColor(item)" Placement="Placement.Right" Option="item">@item.ToString().Replace("_"," ")</MudRadio><br/>
                                     }
                                 </MudRadioGroup>
-                                <MudButton OnClick="()=>action.ShowSample = !action.ShowSample" Color="Color.Info" Class="ma-3">Request Sample</MudButton>
+                                <MudButton OnClick="()=>action.ShowSample = !action.ShowSample" Color='@(action.ShowSample?Color.Info:Color.Default)' Class="ma-3 text-trans-none">@(action.ShowSample?"Hide":"Show") Request Sample</MudButton>
                                 @if (action.ShowSample)
                                 {
-                                  <MudPaper Class="pa-3">
+                                    <MudPaper Class="pa-3 ma-3">
                                     <pre style="font-family: 'JetBrains Mono'">
                                         @(Extensions.GetRequestSample(action.MethodName))
                                     </pre>
@@ -73,6 +73,9 @@
         text-align: start;
     }
 
+    .text-trans-none{
+        text-transform:none !important;
+    }
     .console-content {
         color: white;
         overflow: auto;
