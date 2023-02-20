@@ -107,24 +107,24 @@ public class DynamicXmlObject : DynamicObject, IXmlSerializable
             {
                 writer.WriteAttributeString("xsi", "nil", null, "true");
             }
-            else if (kvp.Value is DynamicXmlObject)
+            else if (kvp.Value is DynamicXmlObject @object)
             {
                 // If the property value is another DynamicXmlObject, recursively write it as a child element
-                ((DynamicXmlObject)kvp.Value).WriteXml(writer);
+                @object.WriteXml(writer);
             }
-            else if (kvp.Value is IList)
+            else if (kvp.Value is IList list)
             {
                 // If the property value is a list, recursively write each item as a child element
-                foreach (var item in (IList)kvp.Value)
+                foreach (var item in list)
                 {
                     writer.WriteStartElement(kvp.Key);
                     if (item == null)
                     {
                         writer.WriteAttributeString("xsi", "nil", null, "true");
                     }
-                    else if (item is DynamicXmlObject)
+                    else if (item is DynamicXmlObject dObject)
                     {
-                        ((DynamicXmlObject)item).WriteXml(writer);
+                        dObject.WriteXml(writer);
                     }
                     else
                     {
@@ -149,8 +149,11 @@ public class DynamicXmlObject : DynamicObject, IXmlSerializable
         
         var doc = new XmlDocument();
         doc.LoadXml(xml);
-
-        var root = doc.DocumentElement;      
+        var root = doc.DocumentElement; 
+        if(root == null)
+        {
+            return null;
+        }
         if (root.HasAttributes)
         {
             var dict = new Dictionary<string, object>();
