@@ -89,7 +89,7 @@ public static class Extensions
         var files = Directory.GetFiles(folderPath);
         foreach (var file in files.Where(f => f.EndsWith(".xml")))
         {
-            if (!actions.Any(a => a.Request.XMLFileName == Path.GetFileName(file)) && !actions.Any(a => a.Response.XMLFileName == Path.GetFileName(file)))
+            if (!actions.Any(a => a.Request.XMLFileName == Path.GetFileName(file)) && !actions.Any(a => a.Responses.Any(r=>r.XMLFileName  == Path.GetFileName(file))))
             {
                 File.Delete(file);
                 Console.WriteLine($"Deleted UnusableXMLFiles file {file}");

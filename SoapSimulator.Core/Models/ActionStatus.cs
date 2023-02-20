@@ -2,5 +2,9 @@
 
 public enum ActionStatus
 {
-    Success,No_Response,Not_Found, Failure
+    Success,
+    No_Response,
+    Not_Found, 
+    Failure,
+    No_Records_Found
 }

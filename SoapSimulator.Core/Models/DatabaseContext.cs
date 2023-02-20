@@ -27,7 +27,7 @@ public class DatabaseContext : DbContext
                 f.Property(ff => ff.Id);
                 f.WithOwner(ff => ff.Action);
             }); 
-            e.OwnsOne(s => s.Response, f2 =>
+            e.OwnsMany(s => s.Responses, f2 =>
             {
                 f2.ToTable("ResponseFormats");
                 f2.Property(ff => ff.Id);

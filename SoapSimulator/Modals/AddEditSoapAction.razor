@@ -15,9 +15,7 @@
                     <MudTextField ReadOnly Required Lines="6" @bind-Value="@Model.Request.Body" Variant="Variant.Outlined" Label="Enter sample request XML." />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudText Align="Align.Center" Typo="Typo.h6">Response Format</MudText>
-                    <MudDivider />
-                    <MudTextField Required Lines="6" @bind-Value="@Model.Response.Body" Variant="Variant.Outlined" Label="Enter sample response  XML.(No namespaces!)" />
+                    
                 </MudItem>
             </MudGrid>
         </DialogContent>
@@ -45,29 +43,18 @@
     async Task Save()
     {   
 
-        Model.MethodName = Model.MethodName.Trim();
-        if (string.IsNullOrEmpty(Model.Response.Body))
-        {
-            Error("Please provide a sample response xml.");
-            return;
-        }
+        Model.MethodName = Model.MethodName.Trim();      
         if (string.IsNullOrEmpty(Model.Request.Body))
         {
             Error("Please provide a sample request xml.");
             return;
         }
-        var validateReq = xmlValidator.IsValidXml(Model.Request.Body);
-        var validateRes = xmlValidator.IsValidXml(Model.Response.Body);
+        var validateReq = xmlValidator.IsValidXml(Model.Request.Body);      
         if (!validateReq.IsValid)
         {
             Error("Request XML Error: " + validateReq.Message);
             return;
-        } 
-        if (!validateRes.IsValid)
-        {
-            Error("Response XML Error: " + validateRes.Message);
-            return;
-        }
+        }         
         if (View)
         {
             await configurationService.UpdateActionAsync(Model);

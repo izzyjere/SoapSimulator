@@ -102,9 +102,7 @@
         var delete = await dialogService.ShowMessageBox("Delete Action", "Are you sure you wann delete this action?", yesText: "Yes", noText: "No");
         if ((bool)delete)
         {
-            Model.Actions.Remove(record);
-            await configurationService.DeleteXSD(record.Request.XMLFileName);
-            await configurationService.DeleteXSD(record.Response.XMLFileName);
+            Model.Actions.Remove(record);           
             StateHasChanged();
         }
     }

@@ -26,11 +26,8 @@ public class ActionService : IActionService
 
             var result = action.Status switch
             {
-                ActionStatus.Success => ActionResponse.Success(action.Response.Body),
-                ActionStatus.Failure => null,
-                ActionStatus.No_Response => ActionResponse.Success("<string>No records found</string>", "No records found."),
-                ActionStatus.Not_Found => ActionResponse.Failure("Action set to not found."),
-                _ => ActionResponse.Success(action.Response.Body)
+                ActionStatus.Failure => null,               
+                _ => ActionResponse.Success(action.GetResponse().Body)
 
             };
             logService.Log(nameof(ActionService), $"Executed action {actionName} successfully.");

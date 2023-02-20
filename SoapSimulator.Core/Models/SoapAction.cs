@@ -9,15 +9,20 @@ public class SoapAction
     [Required]    
     public string Description { get; set; }
     public RequestFormat Request { get; set; }
-    public ResponseFormat Response { get; set; }
+    public List<ResponseFormat> Responses { get; set; }
     public ActionStatus Status { get; set; }
     public SystemConfiguration SystemConfiguration { get; set; }
     public SoapAction()
     {
         Request = new();
-        Response = new();      
+        Responses = new();      
         DateCreated = DateTime.Now;
     }
     [NotMapped]
     public bool ShowSample { get; set; }
+    public ResponseFormat GetResponse()
+    {
+        return Responses.FirstOrDefault(r => r.ActionStatus == Status);
+    }
+
 }

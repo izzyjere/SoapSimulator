@@ -11,13 +11,8 @@ public class ConfigurationService : IConfigurationService
         this.logService = logService;
     }
 
-    public async Task<bool> DeleteConfigurationAsync(SystemConfiguration configuration)
-    {
-        configuration.Actions.ForEach(async action =>
-        {
-            await DeleteXSD(action.Request.XMLFileName);
-            await DeleteXSD(action.Response.XMLFileName);
-        });
+    public async Task<bool> DeleteConfigurationAsync(SystemConfiguration configuration)    {
+      
         _db.SystemConfigurations.Remove(configuration);
         return await _db.SaveChangesAsync() != 0;
     }
@@ -26,7 +21,12 @@ public class ConfigurationService : IConfigurationService
        
         if (action != null)
         {
-            action.Response.XMLFileName = await SaveXSD(action.Response.Body,action.Response.XMLFileName);
+            action.Responses.ForEach(async response =>
+            {
+                {
+                    response.XMLFileName = await SaveXSD(response.Body,response.XMLFileName);
+                }
+            });
             action.Request.XMLFileName = await SaveXSD(action.Request.Body,action.Request.XMLFileName);
             _db.SoapActions.Update(action);
             await _db.SaveChangesAsync();
@@ -60,7 +60,12 @@ public class ConfigurationService : IConfigurationService
         else { }
         configuration.Actions.ForEach(async action =>
         {
-            action.Response.XMLFileName = await SaveXSD(action.Response.Body);
+            action.Responses.ForEach(async response =>
+            {
+                {
+                    response.XMLFileName = await SaveXSD(response.Body);
+                }
+            });
             action.Request.XMLFileName = await SaveXSD(action.Request.Body);
         });
         _db.SystemConfigurations.Add(configuration);
@@ -112,7 +117,12 @@ public class ConfigurationService : IConfigurationService
         else { }
         configuration.Actions.ForEach(async action =>
         {
-            action.Response.XMLFileName = await SaveXSD(action.Response.Body);
+            action.Responses.ForEach(async response =>
+            {
+                {
+                    response.XMLFileName = await SaveXSD(response.Body);
+                }
+            });
             action.Request.XMLFileName = await SaveXSD(action.Request.Body);
         });
         _db.SystemConfigurations.Update(configuration);
