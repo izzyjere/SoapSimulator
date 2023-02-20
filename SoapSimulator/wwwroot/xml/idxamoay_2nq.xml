@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Account>
-  <AccountNumber>10010002</AccountNumber>
-  <Status>Active</Status>
-  <CustomerName>John Doe</CustomerName>
-  <Type>Checking</Type>
-  <Address>456 High St.</Address>
-  <BranchCode>BR002</BranchCode>
-</Account>
