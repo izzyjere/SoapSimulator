@@ -3,7 +3,7 @@
 <PageTitle>Soap Simulator Home</PageTitle>
 <MudGrid Spacing="3">
     <MudItem xs="12">
-        <MudCard Square Style="height:400px">
+        <MudCard Square Style="min-height:400px">
             <MudCardHeader>
                 <MudText Typo="Typo.h6">Service Actions @(CurrentConfiguration !=null?$"[{CurrentConfiguration.Name}]":"")</MudText>
             </MudCardHeader>
@@ -24,6 +24,15 @@
                                         <MudRadio Color="GetColor(item)" Placement="Placement.Right" Option="item">@item.ToString().Replace("_"," ")</MudRadio><br/>
                                     }
                                 </MudRadioGroup>
+                                <MudButton OnClick="()=>action.ShowSample = !action.ShowSample" Color="Color.Info" Class="ma-3">Request Sample</MudButton>
+                                @if (action.ShowSample)
+                                {
+                                  <MudPaper Class="pa-3">
+                                    <pre style="font-family: 'JetBrains Mono'">
+                                        @(Extensions.GetRequestSample(action.MethodName))
+                                    </pre>
+                                  </MudPaper>
+                                }                                
                             </MudTabPanel>
                         }
                     </MudTabs>
@@ -97,4 +106,5 @@
         logService.Log(nameof(UpdateActionStatus), $"{action.MethodName} set to {status.ToString().Replace("_", "")}");
         StateHasChanged();
     }
+    
 }

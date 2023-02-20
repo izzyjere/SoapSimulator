@@ -13,7 +13,7 @@ using SoapSimulator.Core.Services;
 using Hangfire;
 
 namespace SoapSimulator.Core;
-public static class Extension
+public static class Extensions
 {
     public static IServiceCollection AddSoapSimulatorCore(this IServiceCollection services)
     {
@@ -29,7 +29,21 @@ public static class Extension
         return services;
     }
 
-    
+   public static string GetRequestSample(string name)
+    {
+        return $"""
+                 <?xml version="1.0" encoding="utf-8"?>
+                 <soapenv:Envelope     
+                 	  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                       xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                     <soapenv:Body>
+                         <syb:ExecuteAction>           
+                             <syb:ActionName>{name}</syb:ActionName>                   
+                         </syb:ExecuteAction>
+                     </soapenv:Body>
+                 </soapenv:Envelope>
+                 """;
+    }
     public static IApplicationBuilder MigrateDatabase(this IApplicationBuilder app)
     {
         var scope = app.ApplicationServices.CreateScope();
