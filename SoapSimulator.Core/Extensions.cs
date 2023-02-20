@@ -1,16 +1,28 @@
-﻿using System.Xml.Serialization;
-using System.Xml;
+﻿global using System.Collections;
+global using System.ComponentModel.DataAnnotations;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using System.Dynamic;
+global using System.Runtime.Serialization;
+global using System.ServiceModel;
+global using System.Xml;
+global using System.Xml.Schema;
+global using System.Xml.Serialization;
 
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+global using Hangfire;
 
-using SoapCore;
+global using Microsoft.AspNetCore.Builder;
+global using Microsoft.AspNetCore.Hosting;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Primitives;
 
-using SoapSimulator.Core.Models;
-using SoapSimulator.Core.Services;
-using Hangfire;
+global using SoapCore;
+global using SoapCore.Extensibility;
+global using SoapCore.ServiceModel;
+
+global using SoapSimulator.Core.Models;
+global using SoapSimulator.Core.Services;
 
 namespace SoapSimulator.Core;
 public static class Extensions

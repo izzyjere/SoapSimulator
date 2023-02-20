@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-
-using SoapSimulator.Core.Models;
-
-namespace SoapSimulator.Core.Services;
+﻿namespace SoapSimulator.Core.Services;
 public class ConfigurationService : IConfigurationService
 {
     readonly DatabaseContext _db;

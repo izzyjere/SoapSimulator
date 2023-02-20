@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-
-namespace SoapSimulator.Core.Models;
+﻿namespace SoapSimulator.Core.Models;
 public class DatabaseContext : DbContext
 {
     public DatabaseContext()

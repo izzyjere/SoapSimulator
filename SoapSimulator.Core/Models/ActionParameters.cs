@@ -1,7 +1,4 @@
-﻿using System.Runtime.Serialization;
-using System.Xml.Serialization;
-
-namespace SoapSimulator.Core.Models;
+﻿namespace SoapSimulator.Core.Models;
 [DataContract(Namespace = "http://sybrin.co.za/SoapSimulator.Core")]
 public class ActionParameters
 {

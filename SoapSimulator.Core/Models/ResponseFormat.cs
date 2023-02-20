@@ -1,6 +1,4 @@
-﻿global using System.ComponentModel.DataAnnotations;
-
-namespace SoapSimulator.Core.Models;
+﻿namespace SoapSimulator.Core.Models;
 public class ResponseFormat
 {
     public Guid Id { get; set; }

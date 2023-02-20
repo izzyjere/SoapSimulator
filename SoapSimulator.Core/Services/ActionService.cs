@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-
-using SoapSimulator.Core.Models;
-
-namespace SoapSimulator.Core.Services;
+﻿namespace SoapSimulator.Core.Services;
 
 public class ActionService : IActionService
 {

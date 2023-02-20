@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SoapSimulator.Core.Models;
+﻿namespace SoapSimulator.Core.Models;
 public class SoapAction
 {
     [Key]

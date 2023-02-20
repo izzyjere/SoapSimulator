@@ -1,6 +1,4 @@
-﻿using System.Xml;
-
-namespace SoapSimulator.Core.Services;
+﻿namespace SoapSimulator.Core.Services;
 
 public class XMLValidatorService : IXMLValidator
 {
