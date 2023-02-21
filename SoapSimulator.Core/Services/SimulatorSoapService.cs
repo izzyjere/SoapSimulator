@@ -15,23 +15,18 @@ public class SimulatorSoapService : ISoapService
     {
        return "Hello world. " + Msg;
     }
-
-    public ActionResponse ExecuteAction(string ActionName, ActionParameters? ActionParameters)
+    public string MethodNotFound(string name)
+    {
+        return $"Action/Method {name} was not found.";
+    }
+    public ActionResponse ExecuteAction(string ActionId, ActionParameters? ActionParameters)
     { 
-        if(string.IsNullOrEmpty(ActionName))
+        if(string.IsNullOrEmpty(ActionId))
         {
             ActionLogService.Log(nameof(ExecuteAction), "No action name was specified.");
             throw new HttpRequestException("No action was specified. Use element 'ActionName' inside 'ExecuteAction' to specify a service action.");
-        }
-        if(ActionName=="Ping")
-        {
-            return ActionResponse.Success("<string>Hello World.</string>");
-        }
-        var response = actionService.ExecuteAction(ActionName);
-        if (response == null)
-        {
-            throw new HttpRequestException($"Action {ActionName} is set fail.");
-        }
+        }       
+        var response = actionService.ExecuteAction(ActionId);       
         return response;
     }
 

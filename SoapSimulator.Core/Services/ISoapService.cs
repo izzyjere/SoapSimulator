@@ -3,9 +3,10 @@
 public interface ISoapService
 {
     [OperationContract] 
-    ActionResponse ExecuteAction(string ActionName, ActionParameters? ActionParameters);
+    ActionResponse ExecuteAction(string ActionId, ActionParameters? ActionParameters);
     [OperationContract]
     string Ping(string Msg="");
     [OperationContract]
     string InvalidRequest();
+    string MethodNotFound(string name);
 }

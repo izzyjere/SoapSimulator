@@ -1,4 +1,8 @@
-﻿namespace SoapSimulator.Core.Services;
+﻿using System;
+
+using SoapSimulator.Core.Models;
+
+namespace SoapSimulator.Core.Services;
 
 public class ActionService : IActionService
 {
@@ -11,26 +15,25 @@ public class ActionService : IActionService
         _env = env;        
     }
 
-    public ActionResponse? ExecuteAction(string actionName)
+    public ActionResponse ExecuteAction(string actionId)
     {
 
-        var action = _db.SoapActions.FirstOrDefault(x => x.MethodName.ToLower() == actionName.ToLower());
+        var action = _db.SoapActions.FirstOrDefault(x => x.Id == Guid.Parse(actionId));
         if (action == null)
         {
-            ActionLogService.Log(nameof(ActionService), $"Action '{actionName}' not found.");
-            throw new HttpRequestException($"404. Action '{actionName}' not found.");
+            ActionLogService.Log(nameof(ActionService), $"Action '{actionId}' not found.");
+            throw new HttpRequestException($"404. Action '{actionId}' not found.");
         }
-        ActionLogService.Log(nameof(ActionService), $"Executing action {actionName}");
+        ActionLogService.Log(nameof(ActionService), $"Executing action {actionId}");
 
         var result = action.Status switch
         {
-            ActionStatus.Failure => null,
-            ActionStatus.Not_Found => throw new HttpRequestException($"404. Action '{actionName}' not found."),
-            ActionStatus.No_Response => throw new HttpProtocolException(204, "204 No response", new Exception("Action is currently not accepting requests.")),
+            ActionStatus.Failure => throw new HttpRequestException("The action is set to fail."),            
+            ActionStatus.Not_Found => throw new HttpRequestException($"Action/Method is not found."),           
             _ => ActionResponse.Success(action.GetResponse(action.Status).Body)
 
         };
-        ActionLogService.Log(nameof(ActionService), $"Executed action {actionName} successfully.");
+        ActionLogService.Log(nameof(ActionService), $"Executed action {actionId} successfully.");
         return result;
 
 

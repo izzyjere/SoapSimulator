@@ -68,13 +68,13 @@ public static class Extensions
         }
         context.Database.Migrate();        
         return app;
-    }
+    }    
     public static IApplicationBuilder UseSoapSimulatorCore(this IApplicationBuilder app)
     {
-        app.Use((context, next) =>
+        app.Use((context,next) =>
         {
+            
             var path = context.Request.Path;
-
             if (path.HasValue && path.StartsWithSegments("/soap")&& !context.Request.Query.ContainsKey("WSDL"))
             {
                 var actionName = string.Empty;                
@@ -119,25 +119,7 @@ public static class Extensions
                 {
                     actionName = string.Empty;
                 }
-                if (!string.IsNullOrEmpty(actionName))
-                {  
-                    var newBody =
-                    $"""
-                    <?xml version="1.0" encoding="utf-8"?>
-                     <soapenv:Envelope     
-                       	      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                              xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
-                           <soapenv:Body>
-                            <syb:ExecuteAction>
-                              <syb:ActionName>{actionName}</syb:ActionName>
-                            </syb:ExecuteAction>
-                           </soapenv:Body>
-                    </soapenv:Envelope>
-                    """;
-                    context.Request.Body = newBody.ToStream();
-                    context.Request.Path = "/soap";
-                }
-                else
+                if (string.IsNullOrEmpty(actionName))
                 {
                     var newBody =
                     $"""
@@ -152,11 +134,62 @@ public static class Extensions
                     """;
                     context.Request.Body = newBody.ToStream();
                     context.Request.Path = "/soap";
+                    return next(context);
+                }
+                else
+                {
+                    var db = new DatabaseContext();
+                    var action =( db.SoapActions).FirstOrDefault(a => a.MethodName.ToLower() == actionName.ToLower());
+                    if(action==null)
+                    {
+                        var newBody =
+                         $"""
+                           <?xml version="1.0" encoding="utf-8"?>
+                           <soapenv:Envelope     
+                               	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                                    xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                              <soapenv:Body>
+                                <syb:MethodNotFound><syb:name>{actionName}</syb:name></syb:MethodNotFound>
+                              </soapenv:Body>
+                           </soapenv:Envelope>
+                           """;
+                        context.Request.Body = newBody.ToStream();
+                        context.Request.Path = "/soap";
+                        return next(context);
+                    }
+                    else if(action.Status == ActionStatus.No_Response)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status204NoContent;
+                        context.Response.ContentLength = 0;
+                        return Task.CompletedTask;
+                    }
+                    else
+                    {
+                        var newBody =
+                        $"""
+                        <?xml version="1.0" encoding="utf-8"?>
+                         <soapenv:Envelope     
+                           	      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                                  xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                               <soapenv:Body>
+                                <syb:ExecuteAction>
+                                  <syb:ActionId>{action.Id}</syb:ActionId>
+                                </syb:ExecuteAction>
+                               </soapenv:Body>
+                        </soapenv:Envelope>
+                        """;
+                        context.Request.Body = newBody.ToStream();
+                        context.Request.Path = "/soap";
+                        return next(context);
+                    }
                 }
 
             }
-            return next(context);
-
+            else
+            {
+                return next(context);
+            }
+            
         });
         app.UseEndpoints(endpoints =>
         {
@@ -173,7 +206,7 @@ public static class Extensions
                 };
             });
 
-        });
+        });     
         app.UseHangfireServer();
         app.MigrateDatabase();
         return app;
