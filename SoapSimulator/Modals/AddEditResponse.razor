@@ -5,7 +5,7 @@
             <MudTextField Lines="10" Variant="Variant.Outlined" @bind-Value="Body" Required Label="Respose Body XML"/>
         </DialogContent>
         <DialogActions>
-            <MudButton>Close</MudButton>
+            <MudButton OnClick="()=>Dialog.Cancel()">Close</MudButton>
             <MudButton Color="Color.Success" ButtonType="ButtonType.Submit" Variant="Variant.Outlined">Done</MudButton>
         </DialogActions>
     </MudDialog>

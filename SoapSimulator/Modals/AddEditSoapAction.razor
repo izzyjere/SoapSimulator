@@ -20,7 +20,7 @@
                         <center>
                             @foreach (var status in (ActionStatus[])Enum.GetValues(typeof(ActionStatus)))
                             {
-                                <MudChip OnClick="()=>ConfigureResponse(status)" IconColor="Color.Success" Icon='@(Model.GetResponse(status)!=null?Icons.Material.Filled.DoneAll:"")'>@status.ToString().Replace("_"," ")</MudChip>
+                                <MudChip OnClick="()=>ConfigureResponse(status)" IconColor="Color.Success" Icon='@(responses.ContainsKey(status)?Icons.Material.Filled.DoneAll:"")'>@status.ToString().Replace("_"," ")</MudChip>
                             }
                         </center>
                     </MudChipSet>
@@ -59,13 +59,23 @@
     }
     async void ConfigureResponse(ActionStatus status)
     {
-        if (Model.GetResponse(status) == null)
+        if (!responses.ContainsKey(status))
         {
             var dialog = dialogService.Show<AddEditResponse>($"{status.ToString().Replace("_", "")} Response for {Model.MethodName}", new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true });
             var result = await dialog.Result;
             if (!result.Cancelled)
             {
                 responses[status] = result.ToString();
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            var dialog = dialogService.Show<AddEditResponse>($"{status.ToString().Replace("_", "")} Response for {Model.MethodName}", new DialogParameters{["Body"]=responses[status]},new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true });
+            var result = await dialog.Result;
+            if (!result.Cancelled)
+            {
+                responses[status] = result.Data.ToString();
                 StateHasChanged();
             }
         }
