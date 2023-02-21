@@ -97,8 +97,9 @@
     Color GetColor(ActionStatus status) => status switch{
         ActionStatus.Failure => Color.Error,
         ActionStatus.Success => Color.Success,
-        ActionStatus.No_Response => Color.Info,
+        ActionStatus.No_Response => Color.Tertiary,
         ActionStatus.Not_Found => Color.Warning,
+        ActionStatus.No_Records_Found => Color.Info,
         _ => Color.Default
     };
 

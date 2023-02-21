@@ -15,7 +15,7 @@ public class SoapAction
     public SoapAction()
     {
         Request = new();
-        Responses = new();      
+        Responses = new(2);      
         DateCreated = DateTime.Now;
     }
     [NotMapped]

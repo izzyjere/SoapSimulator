@@ -14,30 +14,26 @@ public class ActionService : IActionService
 
     public ActionResponse? ExecuteAction(string actionName)
     {
-        try
+
+        var action = _db.SoapActions.FirstOrDefault(x => x.MethodName == actionName);
+        if (action == null)
         {
-            var action = _db.SoapActions.FirstOrDefault(x => x.MethodName == actionName);
-            if (action == null)
-            {
-                logService.Log(nameof(ActionService), $"Action '{actionName}' not found.");
-                throw new HttpRequestException($"Action '{actionName}' not found.");
-            }
-            logService.Log(nameof(ActionService), $"Executing action {actionName}");
-
-            var result = action.Status switch
-            {
-                ActionStatus.Failure => null,               
-                _ => ActionResponse.Success(action.GetResponse(action.Status).Body)
-
-            };
-            logService.Log(nameof(ActionService), $"Executed action {actionName} successfully.");
-            return result;
+            logService.Log(nameof(ActionService), $"Action '{actionName}' not found.");
+            throw new HttpRequestException($"404. Action '{actionName}' not found.");
         }
-        catch (Exception e)
+        logService.Log(nameof(ActionService), $"Executing action {actionName}");
+
+        var result = action.Status switch
         {
-           Console.WriteLine(e.Message + e.StackTrace);
-            return ActionResponse.Failure(e.Message);
-        }    
-        
+            ActionStatus.Failure => null,
+            ActionStatus.Not_Found => throw new HttpRequestException($"404. Action '{actionName}' not found."),
+            ActionStatus.No_Response => throw new HttpProtocolException(204, "204 No response", new Exception("Action is currently not accepting requests.")),
+            _ => ActionResponse.Success(action.GetResponse(action.Status).Body)
+
+        };
+        logService.Log(nameof(ActionService), $"Executed action {actionName} successfully.");
+        return result;
+
+
     }
 }

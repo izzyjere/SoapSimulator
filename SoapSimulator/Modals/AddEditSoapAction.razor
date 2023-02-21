@@ -19,8 +19,10 @@
                     <MudChipSet>
                         <center>
                             @foreach (var status in (ActionStatus[])Enum.GetValues(typeof(ActionStatus)))
-                            {
-                                <MudChip OnClick="()=>ConfigureResponse(status)" IconColor="Color.Success" Icon='@(responses.ContainsKey(status)?Icons.Material.Filled.DoneAll:"")'>@status.ToString().Replace("_"," ")</MudChip>
+                            {   if(status == ActionStatus.Success || status == ActionStatus.No_Records_Found)
+                                {
+                                    <MudChip OnClick="()=>ConfigureResponse(status)" IconColor="Color.Success" Icon='@(responses.ContainsKey(status)?Icons.Material.Filled.DoneAll:"")'>@status.ToString().Replace("_"," ")</MudChip>
+                                }                               
                             }
                         </center>
                     </MudChipSet>
@@ -65,7 +67,7 @@
             var result = await dialog.Result;
             if (!result.Cancelled)
             {
-                responses[status] = result.ToString();
+                responses[status] = result.Data.ToString();
                 StateHasChanged();
             }
         }
@@ -84,7 +86,7 @@
     void Error(string error) => snackBar.Add(error, Severity.Error);
     async Task Save()
     {
-        if (responses.Count < 5)
+        if (responses.Count < 2)
         {
             Error("Some of the responses havenot been configured.");
             return;
