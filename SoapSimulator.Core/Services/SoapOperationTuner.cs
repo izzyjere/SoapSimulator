@@ -1,8 +1,14 @@
-﻿namespace SoapSimulator.Core.Services;
+﻿using System.Diagnostics;
+
+namespace SoapSimulator.Core.Services;
 public class SoapOperationTuner : IServiceOperationTuner
 {
     public  void Tune(HttpContext httpContext, object serviceInstance, OperationDescription operation)
-    {
+    {  
+        if(string.IsNullOrEmpty(operation.Name))
+        {
+           System.Diagnostics.Debugger.Break();
+        }
         if (operation.Name.Equals("ExecuteAction"))
         {
             StringValues paramValue;

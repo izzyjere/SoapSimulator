@@ -44,18 +44,7 @@ public static class Extensions
 
    public static string GetRequestSample(string name)
     {
-        return $"""
-                 <?xml version="1.0" encoding="utf-8"?>
-                 <soapenv:Envelope     
-                 	  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                       xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
-                     <soapenv:Body>
-                         <syb:ExecuteAction>           
-                             <syb:ActionName>{name}</syb:ActionName>                   
-                         </syb:ExecuteAction>
-                     </soapenv:Body>
-                 </soapenv:Envelope>
-                 """;
+        return $"http://hostname/soap?actionName={name}";           
     }
     public static IApplicationBuilder MigrateDatabase(this IApplicationBuilder app)
     {
@@ -71,7 +60,7 @@ public static class Extensions
         return app;
     }
 
-    public static Stream ToStream(this string @this, object origin)
+    public static Stream ToStream(this string @this)
     {
         var stream = new MemoryStream();
         var writer = new StreamWriter(stream);
@@ -79,6 +68,6 @@ public static class Extensions
         writer.Flush();
         stream.Position = 0;        
         return stream;
-    }
+    }    
     
 }

@@ -6,4 +6,6 @@ public interface ISoapService
     ActionResponse ExecuteAction(string ActionName, ActionParameters? ActionParameters);
     [OperationContract]
     string Ping(string Msg="");
+    [OperationContract]
+    string NoAction();
 }

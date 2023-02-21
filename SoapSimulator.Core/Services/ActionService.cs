@@ -14,7 +14,7 @@ public class ActionService : IActionService
     public ActionResponse? ExecuteAction(string actionName)
     {
 
-        var action = _db.SoapActions.FirstOrDefault(x => x.MethodName == actionName);
+        var action = _db.SoapActions.FirstOrDefault(x => x.MethodName.ToLower() == actionName.ToLower());
         if (action == null)
         {
             ActionLogService.Log(nameof(ActionService), $"Action '{actionName}' not found.");

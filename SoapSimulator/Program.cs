@@ -45,6 +45,51 @@ app.UseStaticFiles();
 app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+app.Use((context,next) =>
+{
+    if(context.Request.Path=="/soap")
+    {   
+        //Get the query parameters       
+        var actionName = context.Request.Query["actionName"];
+        if(!string.IsNullOrEmpty(actionName))
+        {
+            var newBody =
+            $"""
+            <?xml version="1.0" encoding="utf-8"?>
+            <soapenv:Envelope     
+            	  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                <soapenv:Body>
+                 <syb:ExecuteAction>
+                   <syb:ActionName>{actionName}</syb:ActionName>
+                 </syb:ExecuteAction>
+                </soapenv:Body>
+            </soapenv:Envelope>
+            """;
+            context.Request.Body = newBody.ToStream();            
+        }
+        else
+        {
+            var newBody =
+            $"""
+            <?xml version="1.0" encoding="utf-8"?>
+            <soapenv:Envelope     
+            	  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                <soapenv:Body>
+                 <syb:NoAction>
+                   
+                 </syb:NoAction>
+                </soapenv:Body>
+            </soapenv:Envelope>
+            """;
+            context.Request.Body = newBody.ToStream();
+        }
+        
+    }
+    return next(context);
+
+});
 app.UseEndpoints(endpoints =>
 {
     endpoints.UseSoapEndpoint<ISoapService>(options =>
