@@ -8,7 +8,7 @@ public class SimulatorSoapService : ISoapService
     public SimulatorSoapService(IActionService _actionService)
     {
         actionService = _actionService;
-        ActionLogService.Log(nameof(SimulatorSoapService), "Listening for soap requests.");
+        ActionLogService.Log(nameof(SimulatorSoapService), "Soap service initialized.");
     }
 
     public string Ping(string Msg="")
