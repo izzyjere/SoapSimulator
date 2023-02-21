@@ -7,5 +7,5 @@ public interface ISoapService
     [OperationContract]
     string Ping(string Msg="");
     [OperationContract]
-    string NoAction();
+    string InvalidRequest();
 }

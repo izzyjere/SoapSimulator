@@ -35,8 +35,8 @@ public class SimulatorSoapService : ISoapService
         return response;
     }
 
-    public string NoAction()
+    public string InvalidRequest()
     {
-        return "No action was specified. use 'https://hostname/soap?actionName' parameter to provide the action name.";
+        return "No action was specified. use 'https://hostname/soap/{methodName} or https://hostname/soap?m={methodName}'  parameters to provide the action name.";
     }
 }
