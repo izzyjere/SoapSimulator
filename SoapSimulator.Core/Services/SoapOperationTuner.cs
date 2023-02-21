@@ -1,12 +1,6 @@
 ﻿namespace SoapSimulator.Core.Services;
 public class SoapOperationTuner : IServiceOperationTuner
 {
-    readonly ILogService logService;
-    public SoapOperationTuner(ILogService logService)
-    {
-        this.logService = logService;
-    }
-
     public  void Tune(HttpContext httpContext, object serviceInstance, OperationDescription operation)
     {
         if (operation.Name.Equals("ExecuteAction"))
@@ -15,7 +9,7 @@ public class SoapOperationTuner : IServiceOperationTuner
             if (httpContext.Request.Headers.TryGetValue("User-Agent", out paramValue))
             {
                 var userAgent = paramValue[0];
-                logService.Log(nameof(SoapOperationTuner),$"Execute action request from {userAgent}");
+                ActionLogService.Log(nameof(SoapOperationTuner),$"Execute action request from {userAgent}");
             }
 
         } 
@@ -25,7 +19,7 @@ public class SoapOperationTuner : IServiceOperationTuner
             if (httpContext.Request.Headers.TryGetValue("User-Agent", out paramValue))
             {
                 var userAgent = paramValue[0];
-                logService.Log(nameof(SoapOperationTuner),$"Ping request from {userAgent}");
+                ActionLogService.Log(nameof(SoapOperationTuner),$"Ping request from {userAgent}");
             }
 
         }

@@ -24,13 +24,14 @@ global using SoapCore.ServiceModel;
 global using SoapSimulator.Core.Models;
 global using SoapSimulator.Core.Services;
 
+using Microsoft.Extensions.Logging;
+
 namespace SoapSimulator.Core;
 public static class Extensions
 {
     public static IServiceCollection AddSoapSimulatorCore(this IServiceCollection services)
     {
-        services.AddDbContext<DatabaseContext>();       
-        services.AddSingleton<ILogService, ActionLogService>();
+        services.AddDbContext<DatabaseContext>(); 
         services.AddScoped<IConfigurationService, ConfigurationService>();
         services.AddScoped<IActionService, ActionService>();
         services.AddScoped<ISoapService, SimulatorSoapService>();
@@ -60,16 +61,13 @@ public static class Extensions
     {
         var scope = app.ApplicationServices.CreateScope();
         var context = scope.ServiceProvider.GetService<DatabaseContext>();
-        var env = scope.ServiceProvider.GetService<IWebHostEnvironment>();
+        var env = scope.ServiceProvider.GetService<IWebHostEnvironment>();   
+        
         if (context == null || env == null)
         {
             throw new SystemException("No db context was registered");
         }
-        context.Database.Migrate();
-        var folderPath = Path.Combine(env.WebRootPath, "xml");
-        #pragma warning disable CS0618 // Type or member is obsolete
-        RecurringJob.AddOrUpdate(()=>DeleteUnusableXMLFiles(folderPath), Cron.MinuteInterval(1));
-        #pragma warning restore CS0618 // Type or member is obsolete
+        context.Database.Migrate();        
         return app;
     }
 
@@ -82,18 +80,5 @@ public static class Extensions
         stream.Position = 0;        
         return stream;
     }
-    public static void DeleteUnusableXMLFiles(string folderPath)
-    {
-        var context = new DatabaseContext();
-        var actions = context.SoapActions.ToList();        
-        var files = Directory.GetFiles(folderPath);
-        foreach (var file in files.Where(f => f.EndsWith(".xml")))
-        {
-            if (!actions.Any(a => a.Request.XMLFileName == Path.GetFileName(file)) && !actions.Any(a => a.Responses.Any(r=>r.XMLFileName  == Path.GetFileName(file))))
-            {
-                File.Delete(file);
-                Console.WriteLine($"Deleted UnusableXMLFiles file {file}");
-            }
-        }
-    }
+    
 }

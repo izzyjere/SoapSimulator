@@ -4,12 +4,11 @@ public class ActionService : IActionService
 {
     readonly DatabaseContext _db;
     readonly IWebHostEnvironment _env;
-    readonly ILogService logService;
-    public ActionService(DatabaseContext db, IWebHostEnvironment env, ILogService logService)
+   
+    public ActionService(DatabaseContext db, IWebHostEnvironment env)
     {
         _db = db;
-        _env = env;
-        this.logService = logService;
+        _env = env;        
     }
 
     public ActionResponse? ExecuteAction(string actionName)
@@ -18,10 +17,10 @@ public class ActionService : IActionService
         var action = _db.SoapActions.FirstOrDefault(x => x.MethodName == actionName);
         if (action == null)
         {
-            logService.Log(nameof(ActionService), $"Action '{actionName}' not found.");
+            ActionLogService.Log(nameof(ActionService), $"Action '{actionName}' not found.");
             throw new HttpRequestException($"404. Action '{actionName}' not found.");
         }
-        logService.Log(nameof(ActionService), $"Executing action {actionName}");
+        ActionLogService.Log(nameof(ActionService), $"Executing action {actionName}");
 
         var result = action.Status switch
         {
@@ -31,7 +30,7 @@ public class ActionService : IActionService
             _ => ActionResponse.Success(action.GetResponse(action.Status).Body)
 
         };
-        logService.Log(nameof(ActionService), $"Executed action {actionName} successfully.");
+        ActionLogService.Log(nameof(ActionService), $"Executed action {actionName} successfully.");
         return result;
 
 

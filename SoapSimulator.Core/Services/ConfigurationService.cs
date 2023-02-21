@@ -2,13 +2,11 @@
 public class ConfigurationService : IConfigurationService
 {
     readonly DatabaseContext _db;
-    readonly IWebHostEnvironment _environment;
-    readonly ILogService logService;
-    public ConfigurationService(DatabaseContext db, IWebHostEnvironment environment, ILogService logService)
+    readonly IWebHostEnvironment _environment;   
+    public ConfigurationService(DatabaseContext db, IWebHostEnvironment environment)
     {
         _db = db;
-        _environment = environment;
-        this.logService = logService;
+        _environment = environment;       
     }
 
     public async Task<bool> DeleteConfigurationAsync(SystemConfiguration configuration)    {
@@ -30,7 +28,7 @@ public class ConfigurationService : IConfigurationService
             action.Request.XMLFileName = await SaveXSD(action.Request.Body,action.Request.XMLFileName);
             _db.SoapActions.Update(action);
             await _db.SaveChangesAsync();
-            logService.Log(nameof(ConfigurationService), $"Action {action.MethodName} updated.");
+            ActionLogService.Log(nameof(ConfigurationService), $"Action {action.MethodName} updated.");
         }
 
     }

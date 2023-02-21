@@ -2,13 +2,13 @@
 
 public class SimulatorSoapService : ISoapService
 {
-    readonly ILogService logService;
+    
     readonly IActionService actionService;
     
-    public SimulatorSoapService(ILogService _logService, IActionService _actionService)
+    public SimulatorSoapService(IActionService _actionService)
     {
-        logService = _logService;
         actionService = _actionService;
+        ActionLogService.Log(nameof(SimulatorSoapService), "Listening for soap requests.");
     }
 
     public string Ping(string Msg="")
@@ -20,7 +20,7 @@ public class SimulatorSoapService : ISoapService
     { 
         if(string.IsNullOrEmpty(ActionName))
         {
-            logService.Log(nameof(ExecuteAction), "No action name was specified.");
+            ActionLogService.Log(nameof(ExecuteAction), "No action name was specified.");
             throw new HttpRequestException("No action was specified. Use element 'ActionName' inside 'ExecuteAction' to specify a service action.");
         }
         if(ActionName=="Ping")

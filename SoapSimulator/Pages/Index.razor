@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Hangfire;
 
 <PageTitle>Soap Simulator Home</PageTitle>
 <MudGrid Spacing="3">
@@ -46,13 +47,13 @@
                 <MudText Typo="Typo.h6">Service Logs</MudText>
                 <MudSpacer />
                 <MudCardActions>
-                    <MudIconButton Title="Clear all logs." OnClick="()=>logService.ClearAll()" Icon="@Icons.Material.Filled.ClearAll" />
+                    <MudIconButton Title="Clear all logs." OnClick="()=>ActionLogService.ClearAll()" Icon="@Icons.Material.Filled.ClearAll" />
                 </MudCardActions>
             </MudCardHeader>
             <MudCardContent Class="pa-4">
                 <div class="console">
                     <p class="console-content pa-2">
-                        @foreach (var log in logService.Logs)
+                        @foreach (var log in ActionLogService.GetLogs())
                         {
                             @log <br />
                         }
@@ -87,12 +88,17 @@
 @code {
     SystemConfiguration CurrentConfiguration = new();
     protected override async Task OnInitializedAsync()
-    {
-        CurrentConfiguration = await configurationService.GetCurrentConfigurationAsync();
-        logService.LogsUpdated += async (s, e) =>
+    {   
+        
+        CurrentConfiguration = await configurationService.GetCurrentConfigurationAsync();        
+        ActionLogService.LogsUpdated += async (s, e) =>
         {
             await InvokeAsync(StateHasChanged);
         };
+        var folderPath = Path.Combine(env.WebRootPath, "xml");
+        #pragma warning disable CS0618 // Type or member is obsolete
+        RecurringJob.AddOrUpdate(() => DeleteUnusableXMLFiles(folderPath), Cron.MinuteInterval(1));
+        #pragma warning restore CS0618 // Type or member is obsolete
     }
     Color GetColor(ActionStatus status) => status switch{
         ActionStatus.Failure => Color.Error,
@@ -107,8 +113,23 @@
     {
         action.Status = status;
         await configurationService.UpdateActionAsync(action);
-        logService.Log(nameof(UpdateActionStatus), $"{action.MethodName} set to {status.ToString().Replace("_", "")}");
+        ActionLogService.Log(nameof(UpdateActionStatus), $"{action.MethodName} set to {status.ToString().Replace("_", "")}");
         StateHasChanged();
+    }
+    public void DeleteUnusableXMLFiles(string folderPath)
+    {
+        var context = new DatabaseContext();
+        var actions = context.SoapActions.ToList();
+        var files = Directory.GetFiles(folderPath);
+        ActionLogService.Log(nameof(Index), "Finding xml files to clean up.");
+        foreach (var file in files.Where(f => f.EndsWith(".xml")))
+        {
+            if (!actions.Any(a => a.Request.XMLFileName == Path.GetFileName(file)) && !actions.Any(a => a.Responses.Any(r => r.XMLFileName == Path.GetFileName(file))))
+            {
+                File.Delete(file);
+                ActionLogService.Log(nameof(DeleteUnusableXMLFiles), $"Deleted UnusableXMLFiles file {file}");
+            }
+        }
     }
     
 }
