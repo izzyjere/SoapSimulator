@@ -75,56 +75,83 @@ public static class Extensions
         {
             var path = context.Request.Path;
 
-            if (path.HasValue && path.StartsWithSegments("/soap"))
+            if (path.HasValue && path.StartsWithSegments("/soap")&& !context.Request.Query.ContainsKey("WSDL"))
             {
-                var actionName = string.Empty;
-                //Get the query parameters       
-                var queryParam = context.Request.Query["m"];
-                var routeParams = path.Value.Split("/");
-                var routeParam = routeParams.LastOrDefault();
-                if (!string.IsNullOrEmpty(routeParam))
-                {
-                    actionName = routeParam;
+                var actionName = string.Empty;                
+                var queryParam = string.Empty;
+                var routeParam = string.Empty;
+
+                var queryParams = context.Request.Query;
+                if (queryParams.Any() ) 
+                {   
+                    
+                    if (queryParams.ContainsKey("m"))
+                    {
+                        queryParam = queryParams["m"];
+                    }
+                    else if (queryParams.ContainsKey("method"))
+                    {
+                        queryParam = queryParams["method"];
+                    }
+                    else
+                    {
+                        throw new HttpRequestException("Invalid query parameter use 'm' or 'method' ");
+                    } 
                 }
-                else if (!string.IsNullOrEmpty(queryParam))
+                var routeParams = path.Value.Split("/");
+                if(routeParams.Length == 3)
+                {
+                    routeParam = routeParams.LastOrDefault();
+                }
+                else
+                {
+                    routeParam = string.Empty;
+                }
+                if (!string.IsNullOrEmpty(queryParam))
                 {
                     actionName = queryParam;
                 }
+                else if (!string.IsNullOrEmpty(routeParam))
+                {
+                    actionName = routeParam;
+                }                
                 else
                 {
                     actionName = string.Empty;
                 }
                 if (!string.IsNullOrEmpty(actionName))
-                {
+                {  
                     var newBody =
                     $"""
-            <?xml version="1.0" encoding="utf-8"?>
-            <soapenv:Envelope     
-            	  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                  xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
-                <soapenv:Body>
-                 <syb:ExecuteAction>
-                   <syb:ActionName>{actionName}</syb:ActionName>
-                 </syb:ExecuteAction>
-                </soapenv:Body>
-            </soapenv:Envelope>
-            """;
+                    <?xml version="1.0" encoding="utf-8"?>
+                     <soapenv:Envelope     
+                       	      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                              xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                           <soapenv:Body>
+                            <syb:ExecuteAction>
+                              <syb:ActionName>{actionName}</syb:ActionName>
+                            </syb:ExecuteAction>
+                           </soapenv:Body>
+                    </soapenv:Envelope>
+                    """;
                     context.Request.Body = newBody.ToStream();
+                    context.Request.Path = "/soap";
                 }
                 else
                 {
                     var newBody =
                     $"""
-            <?xml version="1.0" encoding="utf-8"?>
-            <soapenv:Envelope     
-            	  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                  xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
-                <soapenv:Body>
-                 <syb:InvalidRequest></syb:InvalidRequest>
-                </soapenv:Body>
-            </soapenv:Envelope>
-            """;
+                    <?xml version="1.0" encoding="utf-8"?>
+                    <soapenv:Envelope     
+                        	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                             xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                       <soapenv:Body>
+                         <syb:InvalidRequest></syb:InvalidRequest>
+                       </soapenv:Body>
+                    </soapenv:Envelope>
+                    """;
                     context.Request.Body = newBody.ToStream();
+                    context.Request.Path = "/soap";
                 }
 
             }
