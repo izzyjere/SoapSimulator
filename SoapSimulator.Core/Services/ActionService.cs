@@ -25,17 +25,23 @@ public class ActionService : IActionService
             throw new HttpRequestException($"An error ha occured.");
         }
         ActionLogService.Log(nameof(ActionService), $"Executing action {actionId}");
-
-        var result = action.Status switch
+        if(action.Status == ActionStatus.Not_Found)
         {
-            ActionStatus.Failure => throw new HttpRequestException("The action is set to fail."),            
-            ActionStatus.Not_Found => throw new HttpRequestException($"Action/Method is not found."),           
-            _ => ActionResponse.Success(action.GetResponse(action.Status).Body)
-
-        };
+            throw new HttpRequestException($"Action/Method is not found.");
+        }
+        if(action.Status == ActionStatus.Failure)
+        {
+            throw new HttpRequestException("The action is set to fail.");
+        }
+        var response = action.GetResponse(action.Status);
+        if(response == null)
+        {
+            throw new HttpRequestException("Something went wrong while processing your request.");
+        }
+        var xmlFilePath = Path.Combine(_env.WebRootPath, "xml", response.XMLFileName);
+        var xml = File.ReadAllText(xmlFilePath);
+        var result = ActionResponse.Success(DynamicXmlObject.Deserialize(xml));
         ActionLogService.Log(nameof(ActionService), $"Executed action {actionId} successfully.");
         return result;
-
-
     }
 }

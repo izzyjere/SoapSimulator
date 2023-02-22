@@ -14,9 +14,9 @@ public class ActionResponse
     public string Message { get; private set; }
 
     [OperationContract]
-    public static ActionResponse Success(string content, string message = "")
+    public static ActionResponse Success(DynamicObject content, string message = "")
     {
-        return new ActionResponse { Content = DynamicXmlObject.Deserialize(content), Status = "Success", Message = message };
+        return new ActionResponse { Content =  content, Status = "Success", Message = message };
     }
 
     [OperationContract]

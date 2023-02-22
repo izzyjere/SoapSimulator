@@ -120,8 +120,7 @@
     {
         var context = new DatabaseContext();
         var actions = context.SoapActions.ToList();
-        var files = Directory.GetFiles(folderPath);
-        ActionLogService.Log(nameof(Index), "Finding xml files to clean up.");
+        var files = Directory.GetFiles(folderPath);       
         foreach (var file in files.Where(f => f.EndsWith(".xml")))
         {
             if (!actions.Any(a => a.Request.XMLFileName == Path.GetFileName(file)) && !actions.Any(a => a.Responses.Any(r => r.XMLFileName == Path.GetFileName(file))))
