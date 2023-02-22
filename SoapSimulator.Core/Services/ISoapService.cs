@@ -1,5 +1,5 @@
 ﻿namespace SoapSimulator.Core.Services;
-[ServiceContract(Namespace = "http://sybrin.co.za/SoapSimulator.Core")]
+[ServiceContract(Namespace = "http://soapsimulator/SoapSimulator.Core")]
 public interface ISoapService
 {
     [OperationContract] 

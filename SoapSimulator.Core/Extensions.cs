@@ -121,9 +121,9 @@ public static class Extensions
                     <?xml version="1.0" encoding="utf-8"?>
                     <soapenv:Envelope     
                         	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                             xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                             xmlns:soapcore="http://soapsimulator/SoapSimulator.Core">
                        <soapenv:Body>
-                         <syb:InvalidRequest></syb:InvalidRequest>
+                         <soapcore:InvalidRequest></soapcore:InvalidRequest>
                        </soapenv:Body>
                     </soapenv:Envelope>
                     """;
@@ -142,9 +142,9 @@ public static class Extensions
                            <?xml version="1.0" encoding="utf-8"?>
                            <soapenv:Envelope     
                                	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                                    xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                                    xmlns:soapcore="http://soapsimulator/SoapSimulator.Core">
                               <soapenv:Body>
-                                <syb:MethodNotFound><syb:name>{actionName}</syb:name></syb:MethodNotFound>
+                                <soapcore:MethodNotFound><soapcore:name>{actionName}</soapcore:name></soapcore:MethodNotFound>
                               </soapenv:Body>
                            </soapenv:Envelope>
                            """;
@@ -165,11 +165,11 @@ public static class Extensions
                         <?xml version="1.0" encoding="utf-8"?>
                          <soapenv:Envelope     
                            	      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                                  xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                                  xmlns:soapcore="http://soapsimulator/SoapSimulator.Core">
                                <soapenv:Body>
-                                <syb:ExecuteAction>
-                                  <syb:ActionId>{action.Id}</syb:ActionId>
-                                </syb:ExecuteAction>
+                                <soapcore:ExecuteAction>
+                                  <soapcore:ActionId>{action.Id}</soapcore:ActionId>
+                                </soapcore:ExecuteAction>
                                </soapenv:Body>
                         </soapenv:Envelope>
                         """;
@@ -195,7 +195,7 @@ public static class Extensions
                 options.HttpGetEnabled = true;
                 options.AdditionalEnvelopeXmlnsAttributes = new Dictionary<string, string>()
                 {
-                    { "syb", "http://sybrin.co.za/SoapSimulator.Core" },
+                    { "soapcore", "http://soapsimulator/SoapSimulator.Core" },
                     { "core", "http://schemas.datacontract.org/2004/07/SoapSimulator.Core" },
                     { "array", "http://schemas.microsoft.com/2003/10/Serialization/Arrays" }
                 };

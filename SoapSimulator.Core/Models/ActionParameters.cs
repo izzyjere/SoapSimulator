@@ -1,11 +1,11 @@
 ﻿namespace SoapSimulator.Core.Models;
-[DataContract(Namespace = "http://sybrin.co.za/SoapSimulator.Core")]
+[DataContract(Namespace = "http://soapsimulator/SoapSimulator.Core")]
 public class ActionParameters
 {
     [DataMember]
     public List<Parameter>? Parameters { get; set; }   
 }
-[DataContract(Namespace = "http://sybrin.co.za/SoapSimulator.Core")]
+[DataContract(Namespace = "http://soapsimulator/SoapSimulator.Core")]
 public class Parameter
 {
     [SoapAttribute]

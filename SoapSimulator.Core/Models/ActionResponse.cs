@@ -1,6 +1,6 @@
 ﻿namespace SoapSimulator.Core.Models;
 
-[DataContract(Namespace = "http://sybrin.co.za/SoapSimulator.Core")]
+[DataContract(Namespace = "http://soapsimulator/SoapSimulator.Core")]
 [KnownType(typeof(DynamicXmlObject))]
 public class ActionResponse
 {

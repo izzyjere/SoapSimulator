@@ -60,9 +60,9 @@ app.Use((context,next) =>
             <?xml version="1.0" encoding="utf-8"?>
             <soapenv:Envelope     
                 	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                     xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                     xmlns:core="http://corerin.co.za/SoapSimulator.Core">
                <soapenv:Body>
-                 <syb:InvalidRequest></syb:InvalidRequest>
+                 <core:InvalidRequest></core:InvalidRequest>
                </soapenv:Body>
             </soapenv:Envelope>
             """;
@@ -81,9 +81,9 @@ app.Use((context,next) =>
                    <?xml version="1.0" encoding="utf-8"?>
                    <soapenv:Envelope     
                        	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                            xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                            xmlns:core="http://corerin.co.za/SoapSimulator.Core">
                       <soapenv:Body>
-                        <syb:MethodNotFound><syb:name>{actionName}</syb:name></syb:MethodNotFound>
+                        <core:MethodNotFound><core:name>{actionName}</core:name></core:MethodNotFound>
                       </soapenv:Body>
                    </soapenv:Envelope>
                    """;
@@ -105,11 +105,11 @@ app.Use((context,next) =>
                 <?xml version="1.0" encoding="utf-8"?>
                  <soapenv:Envelope     
                    	      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                          xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+                          xmlns:core="http://corerin.co.za/SoapSimulator.Core">
                        <soapenv:Body>
-                        <syb:ExecuteAction>
-                          <syb:ActionId>{action.Id}</syb:ActionId>
-                        </syb:ExecuteAction>
+                        <core:ExecuteAction>
+                          <core:ActionId>{action.Id}</core:ActionId>
+                        </core:ExecuteAction>
                        </soapenv:Body>
                 </soapenv:Envelope>
                 """;
@@ -126,4 +126,51 @@ app.Use((context,next) =>
     }
     
 });
+```
+## Sample Response from the server for the soap request <code></code>
+```xml
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://soapserver/SoapSimulator.Core" xmlns:core="http://schemas.datacontract.org/2004/07/SoapSimulator.Core" xmlns:array="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+    <s:Body>
+        <core:ExecuteActionResponse>
+            <core:ExecuteActionResult xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                <core:Body i:type="core:DynamicXmlObject">
+                    <Transaction>
+                        <Transaction>
+                            <Date>2022-02-16T17:30:45</Date>
+                            <CreditValueDate>2022-02-16T17:30:45</CreditValueDate>
+                            <DebitValueDate>2022-02-16T17:30:45</DebitValueDate>
+                            <CreditAmount>250.00</CreditAmount>
+                            <DebitAccount>10010002</DebitAccount>
+                            <CreditAccount>10010003</CreditAccount>
+                            <Narration>Transfer to Savings</Narration>
+                            <DestinationBankSortCode>BR003</DestinationBankSortCode>
+                        </Transaction>
+                        <Transaction>
+                            <Date>2022-02-17T14:20:10</Date>
+                            <CreditValueDate>2022-02-17T14:20:10</CreditValueDate>
+                            <DebitValueDate>2022-02-17T14:20:10</DebitValueDate>
+                            <CreditAmount>120.00</CreditAmount>
+                            <DebitAccount>10010002</DebitAccount>
+                            <CreditAccount>10010001</CreditAccount>
+                            <Narration>ATM Withdrawal</Narration>
+                            <DestinationBankSortCode>BR001</DestinationBankSortCode>
+                        </Transaction>
+                        <Transaction>
+                            <Date>2022-02-18T09:12:34</Date>
+                            <CreditValueDate>2022-02-18T09:12:34</CreditValueDate>
+                            <DebitValueDate>2022-02-18T09:12:34</DebitValueDate>
+                            <CreditAmount>2500.00</CreditAmount>
+                            <DebitAccount>10010002</DebitAccount>
+                            <CreditAccount>10010001</CreditAccount>
+                            <Narration>Salary Payment</Narration>
+                            <DestinationBankSortCode>BR001</DestinationBankSortCode>
+                        </Transaction>
+                    </Transaction>
+                </core:Body>
+                <core:Message></core:Message>
+                <core:Status>Success</core:Status>
+            </core:ExecuteActionResult>
+        </core:ExecuteActionResponse>
+    </s:Body>
+</s:Envelope>
 ```

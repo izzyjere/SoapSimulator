@@ -14,11 +14,11 @@ public class RequestFormat
        <?xml version="1.0" encoding="utf-8"?>
        <soapenv:Envelope     
        	  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-             xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
+             xmlns:soapcore="http://soapsimulator/SoapSimulator.Core">
            <soapenv:Body>
-               <syb:ExecuteAction>           
-                   <syb:ActionName>{ExampleAction}</syb:ActionName>                   
-               </syb:ExecuteAction>
+               <soapcore:ExecuteAction>           
+                   <soapcore:ActionName>{ExampleAction}</soapcore:ActionName>                   
+               </soapcore:ExecuteAction>
            </soapenv:Body>
        </soapenv:Envelope>
        """;
