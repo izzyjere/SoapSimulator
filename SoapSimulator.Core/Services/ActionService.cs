@@ -48,7 +48,7 @@ public class ActionService : IActionService
         {
             xml = response.Body;
         }
-        var result = ActionResponse.Success(DynamicXmlObject.Deserialize(xml));
+        var result = ActionResponse.Success(DynamicXmlObject.Deserialize(xml),action.MethodName);
         ActionLogService.Log(nameof(ActionService), $"Executed action {actionId} successfully.");
         return result;
     }

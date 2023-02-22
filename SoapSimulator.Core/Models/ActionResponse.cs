@@ -4,7 +4,10 @@
 [KnownType(typeof(DynamicXmlObject))]
 public class ActionResponse
 {
-    [DataMember(Name = "Body")]
+
+    [DataMember]
+    public string Method { get; private set; }
+    [DataMember(Name = "Data")]
     public dynamic Content { get; set; }
 
     [DataMember]
@@ -14,15 +17,15 @@ public class ActionResponse
     public string Message { get; private set; }
 
     [OperationContract]
-    public static ActionResponse Success(DynamicObject content, string message = "")
+    public static ActionResponse Success(DynamicObject content,string method, string message = "")
     {
-        return new ActionResponse { Content =  content, Status = "Success", Message = message };
+        return new ActionResponse { Content =  content, Status = "Success",Method=method, Message = message };
     }
 
     [OperationContract]
-    public static ActionResponse Failure(string message)
+    public static ActionResponse Failure(string message, string method)
     {
-        return new ActionResponse { Status = "Failure", Message = message };
+        return new ActionResponse { Status = "Failure",Method=method, Message = message };
     }
 }
 

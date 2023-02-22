@@ -60,9 +60,9 @@ app.Use((context,next) =>
             <?xml version="1.0" encoding="utf-8"?>
             <soapenv:Envelope     
                 	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                     xmlns:core="http://corerin.co.za/SoapSimulator.Core">
+                     xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
                <soapenv:Body>
-                 <core:InvalidRequest></core:InvalidRequest>
+                 <syb:InvalidRequest></syb:InvalidRequest>
                </soapenv:Body>
             </soapenv:Envelope>
             """;
@@ -81,9 +81,9 @@ app.Use((context,next) =>
                    <?xml version="1.0" encoding="utf-8"?>
                    <soapenv:Envelope     
                        	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                            xmlns:core="http://corerin.co.za/SoapSimulator.Core">
+                            xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
                       <soapenv:Body>
-                        <core:MethodNotFound><core:name>{actionName}</core:name></core:MethodNotFound>
+                        <syb:MethodNotFound><syb:name>{actionName}</syb:name></syb:MethodNotFound>
                       </soapenv:Body>
                    </soapenv:Envelope>
                    """;
@@ -105,11 +105,11 @@ app.Use((context,next) =>
                 <?xml version="1.0" encoding="utf-8"?>
                  <soapenv:Envelope     
                    	      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                          xmlns:core="http://corerin.co.za/SoapSimulator.Core">
+                          xmlns:syb="http://sybrin.co.za/SoapSimulator.Core">
                        <soapenv:Body>
-                        <core:ExecuteAction>
-                          <core:ActionId>{action.Id}</core:ActionId>
-                        </core:ExecuteAction>
+                        <syb:ExecuteAction>
+                          <syb:ActionId>{action.Id}</syb:ActionId>
+                        </syb:ExecuteAction>
                        </soapenv:Body>
                 </soapenv:Envelope>
                 """;
@@ -127,13 +127,13 @@ app.Use((context,next) =>
     
 });
 ```
-## Sample Response from the server for the soap request <code></code>
+## Sample Response from the server for the soap request <code>http://locahost:5003/soap/GetTransactions</code>
 ```xml
-<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://soapserver/SoapSimulator.Core" xmlns:core="http://schemas.datacontract.org/2004/07/SoapSimulator.Core" xmlns:array="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soapcore="http://soapsimulator/SoapSimulator.Core" xmlns:core="http://schemas.datacontract.org/2004/07/SoapSimulator.Core" xmlns:array="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
     <s:Body>
-        <core:ExecuteActionResponse>
-            <core:ExecuteActionResult xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-                <core:Body i:type="core:DynamicXmlObject">
+        <soapcore:ExecuteActionResponse>
+            <soapcore:ExecuteActionResult xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                <soapcore:Data i:type="core:DynamicXmlObject">
                     <Transaction>
                         <Transaction>
                             <Date>2022-02-16T17:30:45</Date>
@@ -166,11 +166,12 @@ app.Use((context,next) =>
                             <DestinationBankSortCode>BR001</DestinationBankSortCode>
                         </Transaction>
                     </Transaction>
-                </core:Body>
-                <core:Message></core:Message>
-                <core:Status>Success</core:Status>
-            </core:ExecuteActionResult>
-        </core:ExecuteActionResponse>
+                </soapcore:Data>
+                <soapcore:Message></soapcore:Message>
+                <soapcore:Method>GetTransactions</soapcore:Method>
+                <soapcore:Status>Success</soapcore:Status>
+            </soapcore:ExecuteActionResult>
+        </soapcore:ExecuteActionResponse>
     </s:Body>
 </s:Envelope>
 ```
