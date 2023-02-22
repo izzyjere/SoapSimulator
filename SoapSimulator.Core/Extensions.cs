@@ -51,11 +51,6 @@ public static class Extensions
         services.AddSoapCore();
         return services;
     }
-
-   public static string GetRequestSample(string name)
-    {
-        return $"http://hostname/soap?m={name} or \nhttp://hostname/soap?method={name} or \nhttp://hostname/soap/{name} ";           
-    }
     public static IApplicationBuilder MigrateDatabase(this IApplicationBuilder app)
     {
         var scope = app.ApplicationServices.CreateScope();

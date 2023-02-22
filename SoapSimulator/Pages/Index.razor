@@ -25,13 +25,16 @@
                                         <MudRadio Color="GetColor(item)" Placement="Placement.Right" Option="item">@item.ToString().Replace("_"," ")</MudRadio><br/>
                                     }
                                 </MudRadioGroup>
-                                <MudButton OnClick="()=>action.ShowSample = !action.ShowSample" Color='@(action.ShowSample?Color.Info:Color.Default)' Class="ma-3 text-trans-none">@(action.ShowSample?"Hide":"Show") Request Sample</MudButton>
+                                <MudButton OnClick="()=>action.ShowSample = !action.ShowSample" Color='@(action.ShowSample?Color.Info:Color.Default)' Class="ma-3 text-trans-none">@(action.ShowSample?"Hide":"Show") Http POST Urls</MudButton>
                                 @if (action.ShowSample)
                                 {
                                     <MudPaper Class="pa-3 ma-3">
-                                    <pre style="font-family: 'JetBrains Mono'">
-                                        @(Extensions.GetRequestSample(action.MethodName))
-                                    </pre>
+                                    <p style="font-family: 'JetBrains Mono'">
+                                       @foreach (var url in GetRequestSampleUrls(action.MethodName))
+                                       {
+                                         @url <br />
+                                       }                                      
+                                    </p>
                                   </MudPaper>
                                 }                                
                             </MudTabPanel>
@@ -85,6 +88,7 @@
         font-family: 'JetBrains Mono'
     }
 </style>
+@inject NavigationManager navMan
 @code {
     SystemConfiguration CurrentConfiguration = new();
     protected override async Task OnInitializedAsync()
@@ -109,6 +113,10 @@
         _ => Color.Default
     };
 
+    public  string [] GetRequestSampleUrls(string name)
+    {
+        return $"{navMan.BaseUri}soap?m={name},{navMan.BaseUri}soap?method={name},{navMan.BaseUri}soap/{name}".Split(",");
+    }
     async void UpdateActionStatus(SoapAction action,ActionStatus status)
     {
         action.Status = status;
