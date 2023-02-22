@@ -39,7 +39,15 @@ public class ActionService : IActionService
             throw new HttpRequestException("Something went wrong while processing your request.");
         }
         var xmlFilePath = Path.Combine(_env.WebRootPath, "xml", response.XMLFileName);
-        var xml = File.ReadAllText(xmlFilePath);
+        var xml = "";
+        if (File.Exists(xmlFilePath))
+        {
+           xml  = File.ReadAllText(xmlFilePath);
+        }  
+        else
+        {
+            xml = response.Body;
+        }
         var result = ActionResponse.Success(DynamicXmlObject.Deserialize(xml));
         ActionLogService.Log(nameof(ActionService), $"Executed action {actionId} successfully.");
         return result;
