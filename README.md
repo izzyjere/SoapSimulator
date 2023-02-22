@@ -1,5 +1,6 @@
 # SoapSimulator
-ASP.Core Server for Simulating SOAP Protocol. Only useful as a testing environment.
+ASP.Core Server for Simulating SOAP Protocol. Only useful as a testing environment. 
+This sample uses opensource package <a target='_blank' href='https://github.com/DigDes/SoapCore'>SoapCore</a>
 ## General Usage
 The current configuartion ignores any request validation this is mainly for cases where you just want to test various responses from actual soap services.
 To change this behavious modify <code>UseSoapSimulatorCore</code> extension method inside <code>SoapSimulator.Core.Extensions.cs</code> file.
