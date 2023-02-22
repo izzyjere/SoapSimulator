@@ -22,7 +22,7 @@ public class ActionService : IActionService
         if (action == null)
         {
             ActionLogService.Log(nameof(ActionService), $"Action '{actionId}' not found.");
-            throw new HttpRequestException($"404. Action '{actionId}' not found.");
+            throw new HttpRequestException($"An error ha occured.");
         }
         ActionLogService.Log(nameof(ActionService), $"Executing action {actionId}");
 

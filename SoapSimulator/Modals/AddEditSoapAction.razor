@@ -9,11 +9,11 @@
                 <MudItem xs="12" sm="6">
                     <MudTextField ReadOnly="View" Variant="Variant.Outlined" @bind-Value="@Model.Description" Label="Description" For="()=>Model.Description" />
                 </MudItem>
-                <MudItem xs="12">
+               @* <MudItem xs="12">
                     <MudText Align="Align.Center" Typo="Typo.h6">Request Format</MudText>
                     <MudDivider />
                     <MudTextField ReadOnly Required Lines="10" @bind-Value="@Model.Request.Body" Variant="Variant.Outlined" Label="Enter sample request XML." />
-                </MudItem>
+                </MudItem>*@
                 <MudItem xs="12">
                     <MudText Align="Align.Center" Typo="Typo.h6">Configure Action Responses</MudText>
                     <MudChipSet>
