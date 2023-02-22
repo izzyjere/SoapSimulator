@@ -25,7 +25,7 @@ public class ConfigurationService : IConfigurationService
                     response.XMLFileName = await SaveXSD(response.Body,response.XMLFileName);
                 }
             });
-            action.Request.XMLFileName = await SaveXSD(action.Request.Body,action.Request.XMLFileName);
+         //   action.Request.XMLFileName = await SaveXSD(action.Request.Body,action.Request.XMLFileName);
             _db.SoapActions.Update(action);
             await _db.SaveChangesAsync();
             ActionLogService.Log(nameof(ConfigurationService), $"Action {action.MethodName} updated.");
@@ -64,7 +64,7 @@ public class ConfigurationService : IConfigurationService
                     response.XMLFileName = await SaveXSD(response.Body);
                 }
             });
-            action.Request.XMLFileName = await SaveXSD(action.Request.Body);
+           // action.Request.XMLFileName = await SaveXSD(action.Request.Body);
         });
         _db.SystemConfigurations.Add(configuration);
         return await _db.SaveChangesAsync() != 0;
@@ -121,7 +121,7 @@ public class ConfigurationService : IConfigurationService
                     response.XMLFileName = await SaveXSD(response.Body);
                 }
             });
-            action.Request.XMLFileName = await SaveXSD(action.Request.Body);
+           // action.Request.XMLFileName = await SaveXSD(action.Request.Body);
         });
         _db.SystemConfigurations.Update(configuration);
         return await _db.SaveChangesAsync() != 0;
