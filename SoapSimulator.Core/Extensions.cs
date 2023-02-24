@@ -204,7 +204,7 @@ public static class Extensions
                 options.AdditionalEnvelopeXmlnsAttributes = new Dictionary<string, string>()
                 {
                     { "soapcore", "http://soapsimulator/SoapSimulator.Core" },
-                    { "core", "http://schemas.datacontract.org/2004/07/SoapSimulator.Core" },
+                    { "model", "http://schemas.datacontract.org/2004/07/SoapSimulator.Core" },
                     { "array", "http://schemas.microsoft.com/2003/10/Serialization/Arrays" }
                 };
             });
@@ -213,6 +213,27 @@ public static class Extensions
         app.UseHangfireServer();
         app.MigrateDatabase();
         return app;
+    }
+    public static string GetRequestBodyString(string id)
+    {
+        return
+            $"""
+            <?xml version="1.0" encoding="utf-8"?>
+             <soapenv:Envelope     
+               	     xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                      xmlns:soapcore="http://soapsimulator/SoapSimulator.Core"
+                      xmlns:model="http://schemas.datacontract.org/2004/07/SoapSimulator.Core"
+                      xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                   <soapenv:Body>
+                    <soapcore:ExecuteAction>
+                      <soapcore:ActionId>{id}</soapcore:ActionId>
+                      <soapcore:RequestBody i:type="model:DynamicXmlObject">
+                        
+                      </soapcore:RequestBody>
+                    </soapcore:ExecuteAction>
+                   </soapenv:Body>
+            </soapenv:Envelope>
+            """;
     }
     public static Stream ToStream(this string @this)
     {

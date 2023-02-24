@@ -12,14 +12,19 @@ public class RequestFormat
         Body =
        """
        <?xml version="1.0" encoding="utf-8"?>
-       <soapenv:Envelope     
-       	  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-             xmlns:soapcore="http://soapsimulator/SoapSimulator.Core">
-           <soapenv:Body>
-               <soapcore:ExecuteAction>           
-                   <soapcore:ActionName>{ExampleAction}</soapcore:ActionName>                   
+        <soapenv:Envelope     
+          	     xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                 xmlns:soapcore="http://soapsimulator/SoapSimulator.Core"
+                 xmlns:model="http://schemas.datacontract.org/2004/07/SoapSimulator.Core"
+                 xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+              <soapenv:Body>
+               <soapcore:ExecuteAction>
+                 <soapcore:ActionId>{action.Id}</soapcore:ActionId>
+                 <soapcore:RequestBody i:type="model:DynamicXmlObject">
+                   
+                 </soapcore:RequestBody>
                </soapcore:ExecuteAction>
-           </soapenv:Body>
+              </soapenv:Body>
        </soapenv:Envelope>
        """;
     }

@@ -33,7 +33,12 @@
                                        @foreach (var url in GetRequestSampleUrls(action.MethodName))
                                        {
                                          @url <br />
-                                       }                                      
+                                       } 
+                                       <MudDivider/>  
+                                       @if(CurrentConfiguration.ValidateRequestBody)
+                                       {
+                                          Extensions.GetRequestBodyString(action.Id.ToString());
+                                       }
                                     </p>
                                   </MudPaper>
                                 }                                
@@ -93,7 +98,7 @@
     SystemConfiguration CurrentConfiguration = new();
     protected override async Task OnInitializedAsync()
     {   
-        
+
         CurrentConfiguration = await configurationService.GetCurrentConfigurationAsync();        
         ActionLogService.LogsUpdated += async (s, e) =>
         {
@@ -111,9 +116,8 @@
         ActionStatus.Not_Found => Color.Warning,
         ActionStatus.No_Records_Found => Color.Info,
         _ => Color.Default
-    };
-
-    public  string [] GetRequestSampleUrls(string name)
+    };  
+    string [] GetRequestSampleUrls(string name)
     {
         return $"{navMan.BaseUri}soap?m={name},{navMan.BaseUri}soap?method={name},{navMan.BaseUri}soap/{name}".Split(",");
     }

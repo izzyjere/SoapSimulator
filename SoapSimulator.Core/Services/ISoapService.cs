@@ -3,7 +3,7 @@
 public interface ISoapService
 {
     [OperationContract] 
-    ActionResponse ExecuteAction(string ActionId, ActionParameters? ActionParameters);
+    ActionResponse ExecuteAction(string ActionId, DynamicXmlObject RequestBody);
     [OperationContract]
     string Ping(string Msg="");
     [OperationContract]
