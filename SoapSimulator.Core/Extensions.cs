@@ -66,17 +66,17 @@ public static class Extensions
     }    
     public static IApplicationBuilder UseSoapSimulatorCore(this IApplicationBuilder app)
     {
-        app.Use((context,next) =>
+        app.Use((httpContext,middleware) =>
         {
             
-            var path = context.Request.Path;
-            if (path.HasValue && path.StartsWithSegments("/soap")&& !context.Request.Query.ContainsKey("WSDL"))
+            var path = httpContext.Request.Path;
+            if (path.HasValue && path.StartsWithSegments("/soap")&& !httpContext.Request.Query.ContainsKey("WSDL"))
             {
                 var actionName = string.Empty;                
                 var queryParam = string.Empty;
                 var routeParam = string.Empty;
 
-                var queryParams = context.Request.Query;
+                var queryParams = httpContext.Request.Query;
                 if (queryParams.Any() ) 
                 {   
                     
@@ -127,9 +127,9 @@ public static class Extensions
                        </soapenv:Body>
                     </soapenv:Envelope>
                     """;
-                    context.Request.Body = newBody.ToStream();
-                    context.Request.Path = "/soap";
-                    return next(context);
+                    httpContext.Request.Body = newBody.ToStream();
+                    httpContext.Request.Path = "/soap";
+                    return middleware(httpContext);
                 }
                 else
                 {
@@ -148,14 +148,14 @@ public static class Extensions
                               </soapenv:Body>
                            </soapenv:Envelope>
                            """;
-                        context.Request.Body = newBody.ToStream();
-                        context.Request.Path = "/soap";
-                        return next(context);
+                        httpContext.Request.Body = newBody.ToStream();
+                        httpContext.Request.Path = "/soap";
+                        return middleware(httpContext);
                     }
                     else if(action.Status == ActionStatus.No_Response)
                     {
-                        context.Response.StatusCode = StatusCodes.Status204NoContent;
-                        context.Response.ContentLength = 0;
+                        httpContext.Response.StatusCode = StatusCodes.Status204NoContent;
+                        httpContext.Response.ContentLength = 0;
                         return Task.CompletedTask;
                     }
                     else
@@ -173,16 +173,16 @@ public static class Extensions
                                </soapenv:Body>
                         </soapenv:Envelope>
                         """;
-                        context.Request.Body = newBody.ToStream();
-                        context.Request.Path = "/soap";
-                        return next(context);
+                        httpContext.Request.Body = newBody.ToStream();
+                        httpContext.Request.Path = "/soap";
+                        return middleware(httpContext);
                     }
                 }
 
             }
             else
             {
-                return next(context);
+                return middleware(httpContext);
             }
             
         });
