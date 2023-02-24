@@ -41,11 +41,11 @@ public static class Extensions
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             })
             .UseMemoryStorage());
-        services.AddDbContext<DatabaseContext>(); 
+        services.AddDbContext<DatabaseContext>();
         services.AddScoped<IConfigurationService, ConfigurationService>();
         services.AddScoped<IActionService, ActionService>();
         services.AddScoped<ISoapService, SimulatorSoapService>();
-        services.AddScoped<IXMLValidator,XMLValidatorService>();
+        services.AddScoped<IXMLValidator, XMLValidatorService>();
         services.AddSoapExceptionTransformer((ex) => ex.Message);
         services.AddSoapServiceOperationTuner<SoapOperationTuner>();
         services.AddSoapCore();
@@ -55,31 +55,31 @@ public static class Extensions
     {
         var scope = app.ApplicationServices.CreateScope();
         var context = scope.ServiceProvider.GetService<DatabaseContext>();
-        var env = scope.ServiceProvider.GetService<IWebHostEnvironment>();   
-        
+        var env = scope.ServiceProvider.GetService<IWebHostEnvironment>();
+
         if (context == null || env == null)
         {
             throw new SystemException("No db context was registered");
         }
-        context.Database.Migrate();        
+        context.Database.Migrate();
         return app;
-    }    
-    public static IApplicationBuilder UseSoapSimulatorCore(this IApplicationBuilder app)
+    }
+    public static IApplicationBuilder UseSoapSimulatorCore(this IApplicationBuilder app, bool useRequestValidation = false)
     {
-        app.Use((httpContext,middleware) =>
+        app.Use((httpContext, middleware) =>
         {
-            
+
             var path = httpContext.Request.Path;
-            if (path.HasValue && path.StartsWithSegments("/soap")&& !httpContext.Request.Query.ContainsKey("WSDL"))
+            if (path.HasValue && path.StartsWithSegments("/soap") && !httpContext.Request.Query.ContainsKey("WSDL"))
             {
-                var actionName = string.Empty;                
+                var actionName = string.Empty;
                 var queryParam = string.Empty;
                 var routeParam = string.Empty;
 
                 var queryParams = httpContext.Request.Query;
-                if (queryParams.Any() ) 
-                {   
-                    
+                if (queryParams.Any())
+                {
+
                     if (queryParams.ContainsKey("m"))
                     {
                         queryParam = queryParams["m"];
@@ -91,10 +91,10 @@ public static class Extensions
                     else
                     {
                         throw new HttpRequestException("Invalid query parameter use 'm' or 'method' ");
-                    } 
+                    }
                 }
                 var routeParams = path.Value.Split("/");
-                if(routeParams.Length == 3)
+                if (routeParams.Length == 3)
                 {
                     routeParam = routeParams.LastOrDefault();
                 }
@@ -109,25 +109,27 @@ public static class Extensions
                 else if (!string.IsNullOrEmpty(routeParam))
                 {
                     actionName = routeParam;
-                }                
+                }
                 else
                 {
                     actionName = string.Empty;
                 }
                 if (string.IsNullOrEmpty(actionName))
                 {
+
                     var newBody =
                     $"""
-                    <?xml version="1.0" encoding="utf-8"?>
-                    <soapenv:Envelope     
-                        	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                             xmlns:soapcore="http://soapsimulator/SoapSimulator.Core">
-                       <soapenv:Body>
-                         <soapcore:InvalidRequest></soapcore:InvalidRequest>
-                       </soapenv:Body>
-                    </soapenv:Envelope>
-                    """;
+                     <?xml version="1.0" encoding="utf-8"?>
+                     <soapenv:Envelope     
+                         	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                              xmlns:soapcore="http://soapsimulator/SoapSimulator.Core">
+                        <soapenv:Body>
+                          <soapcore:InvalidRequest></soapcore:InvalidRequest>
+                        </soapenv:Body>
+                     </soapenv:Envelope>
+                     """;
                     httpContext.Request.Body = newBody.ToStream();
+
                     httpContext.Request.Path = "/soap";
                     return middleware(httpContext);
                 }
@@ -135,24 +137,25 @@ public static class Extensions
                 {
                     var db = new DatabaseContext();
                     var action = db.SoapActions.FirstOrDefault(a => a.MethodName.ToLower() == actionName.ToLower());
-                    if(action==null)
+                    if (action == null)
                     {
                         var newBody =
-                         $"""
-                           <?xml version="1.0" encoding="utf-8"?>
-                           <soapenv:Envelope     
-                               	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                                    xmlns:soapcore="http://soapsimulator/SoapSimulator.Core">
-                              <soapenv:Body>
-                                <soapcore:MethodNotFound><soapcore:name>{actionName}</soapcore:name></soapcore:MethodNotFound>
-                              </soapenv:Body>
-                           </soapenv:Envelope>
-                           """;
+                             $"""
+                             <?xml version="1.0" encoding="utf-8"?>
+                             <soapenv:Envelope     
+                                 	 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                                      xmlns:soapcore="http://soapsimulator/SoapSimulator.Core">
+                                <soapenv:Body>
+                                  <soapcore:MethodNotFound><soapcore:name>{actionName}</soapcore:name></soapcore:MethodNotFound>
+                                </soapenv:Body>
+                             </soapenv:Envelope>
+                             """;
+
                         httpContext.Request.Body = newBody.ToStream();
                         httpContext.Request.Path = "/soap";
                         return middleware(httpContext);
                     }
-                    else if(action.Status == ActionStatus.No_Response)
+                    else if (action.Status == ActionStatus.No_Response)
                     {
                         httpContext.Response.StatusCode = StatusCodes.Status204NoContent;
                         httpContext.Response.ContentLength = 0;
@@ -160,20 +163,25 @@ public static class Extensions
                     }
                     else
                     {
-                        var newBody =
-                        $"""
-                        <?xml version="1.0" encoding="utf-8"?>
-                         <soapenv:Envelope     
-                           	      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                                  xmlns:soapcore="http://soapsimulator/SoapSimulator.Core">
-                               <soapenv:Body>
-                                <soapcore:ExecuteAction>
-                                  <soapcore:ActionId>{action.Id}</soapcore:ActionId>
-                                </soapcore:ExecuteAction>
-                               </soapenv:Body>
-                        </soapenv:Envelope>
-                        """;
-                        httpContext.Request.Body = newBody.ToStream();
+                        var newBody = "";
+                        if (!useRequestValidation)
+                        {
+                            newBody =
+                            $"""
+                            <?xml version="1.0" encoding="utf-8"?>
+                             <soapenv:Envelope     
+                               	      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                                      xmlns:soapcore="http://soapsimulator/SoapSimulator.Core">
+                                   <soapenv:Body>
+                                    <soapcore:ExecuteAction>
+                                      <soapcore:ActionId>{action.Id}</soapcore:ActionId>
+                                    </soapcore:ExecuteAction>
+                                   </soapenv:Body>
+                            </soapenv:Envelope>
+                            """;
+                            httpContext.Request.Body = newBody.ToStream();
+                        }
+                        
                         httpContext.Request.Path = "/soap";
                         return middleware(httpContext);
                     }
@@ -184,7 +192,7 @@ public static class Extensions
             {
                 return middleware(httpContext);
             }
-            
+
         });
         app.UseEndpoints(endpoints =>
         {
@@ -201,7 +209,7 @@ public static class Extensions
                 };
             });
 
-        });     
+        });
         app.UseHangfireServer();
         app.MigrateDatabase();
         return app;
@@ -212,8 +220,8 @@ public static class Extensions
         var writer = new StreamWriter(stream);
         writer.Write(@this);
         writer.Flush();
-        stream.Position = 0;        
+        stream.Position = 0;
         return stream;
-    }    
-    
+    }
+
 }

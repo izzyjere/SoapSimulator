@@ -15,7 +15,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSoapSimulatorCore();
 builder.Services.AddMudServices();
 builder.Services.AddCors();
-
+var useRequestValidation = builder.Configuration.GetValue<bool>("RequestValidation");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,5 +37,5 @@ app.UseStaticFiles();
 app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-app.UseSoapSimulatorCore();
+app.UseSoapSimulatorCore(useRequestValidation);
 app.Run();
