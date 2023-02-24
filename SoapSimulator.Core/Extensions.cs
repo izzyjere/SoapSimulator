@@ -134,7 +134,7 @@ public static class Extensions
                 else
                 {
                     var db = new DatabaseContext();
-                    var action =( db.SoapActions).FirstOrDefault(a => a.MethodName.ToLower() == actionName.ToLower());
+                    var action = db.SoapActions.FirstOrDefault(a => a.MethodName.ToLower() == actionName.ToLower());
                     if(action==null)
                     {
                         var newBody =
