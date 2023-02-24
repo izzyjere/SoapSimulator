@@ -3,13 +3,13 @@
     <MudDialog>
         <DialogContent>
             <MudGrid>
-                <MudItem xs="12" sm="6">
+                <MudItem xs="12" sm="5">
                     <MudTextField Variant="Variant.Outlined" @bind-Value="@Model.Name" Label="Configuration Name" For="()=>Model.Name" />
                 </MudItem>
                 <MudItem xs="12" sm="3">
                     <MudSwitch T="bool" Color="Color.Secondary" @bind-Checked="@Model.IsCurrent">Set as current</MudSwitch>
                 </MudItem>
-                <MudItem xs="12" sm="3">
+                <MudItem xs="12" sm="4">
                     <MudSwitch T="bool" Color="Color.Secondary" @bind-Checked="@Model.ValidateRequestBody">Validate Request Body</MudSwitch>
                 </MudItem>
                 <MudItem xs="12">

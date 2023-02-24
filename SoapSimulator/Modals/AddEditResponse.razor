@@ -1,15 +1,12 @@
-﻿<EditForm Model="Body" OnValidSubmit="Save" OnInvalidSubmit='()=>Error("XML string cannot be empty.")'>
-    <DataAnnotationsValidator/>
-    <MudDialog>
-        <DialogContent>
-            <MudTextField Lines="10" Variant="Variant.Outlined" @bind-Value="Body" Required Label="Respose Body XML"/>
-        </DialogContent>
-        <DialogActions>
-            <MudButton OnClick="()=>Dialog.Cancel()">Close</MudButton>
-            <MudButton Color="Color.Success" ButtonType="ButtonType.Submit" Variant="Variant.Outlined">Done</MudButton>
-        </DialogActions>
-    </MudDialog>
-</EditForm>
+﻿<MudDialog>
+    <DialogContent>
+        <MudTextField Lines="10" Variant="Variant.Outlined" @bind-Value="Body" Required Label="Respose Body XML" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="()=>Dialog.Cancel()">Close</MudButton>
+        <MudButton Color="Color.Success" OnClick="Save" Variant="Variant.Outlined">Done</MudButton>
+    </DialogActions>
+</MudDialog>
 
 @code {
     [CascadingParameter] MudDialogInstance Dialog { get; set; }
@@ -17,13 +14,13 @@
     void Error(string error) => snackBar.Add(error, Severity.Error);
     void Save()
     {
-        if(string.IsNullOrEmpty(Body))
+        if (string.IsNullOrEmpty(Body))
         {
             Error("XML string can't be empty.");
             return;
         }
         var validate = xmlValidator.IsValidXml(Body);
-        if(validate.IsValid)
+        if (validate.IsValid)
         {
             Dialog.Close(Body);
         }
