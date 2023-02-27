@@ -135,7 +135,71 @@ public class DynamicXmlObject : DynamicObject, IXmlSerializable
         }
     }
 
-
+    public static dynamic ReadFromFile(string path)
+    {
+        var doc = new XmlDocument();
+        doc.Load(path);
+        var root = doc.DocumentElement;
+        if (root == null)
+        {
+            return null;
+        }
+        if (root.HasAttributes)
+        {
+            var dict = new Dictionary<string, object>();
+            foreach (XmlAttribute attribute in root.Attributes)
+            {
+                dict.Add(attribute.Name, attribute.Value);
+            }
+            Console.WriteLine($"Returning new DynamicXmlObject with attributes:\n{string.Join("\n", dict)}");
+            return new DynamicXmlObject(dict);
+        }
+        else if (root.HasChildNodes)
+        {
+            var children = root.ChildNodes;
+            if (children.Count == 1 && children[0].NodeType == XmlNodeType.Text)
+            {
+                Console.WriteLine($"Returning value: {children[0].Value}");
+                return children[0].Value;
+            }
+            else
+            {
+                var dict = new Dictionary<string, dynamic>();
+                foreach (XmlNode child in children)
+                {
+                    if (child.NodeType != XmlNodeType.Element) continue;
+                    var key = child.LocalName;
+                    if (dict.ContainsKey(key))
+                    {
+                        if (dict[key] is List<dynamic>)
+                        {
+                            dict[key].Add(Deserialize(child.OuterXml));
+                        }
+                        else
+                        {
+                            var list = new List<dynamic>
+                            {
+                                dict[key],
+                                Deserialize(child.OuterXml)
+                            };
+                            dict[key] = list;
+                        }
+                    }
+                    else
+                    {
+                        dict.Add(key, Deserialize(child.OuterXml));
+                    }
+                }
+                Console.WriteLine($"Returning new DynamicXmlObject with properties:\n{string.Join("\n", dict.Select(kv => $"{kv.Key}: {kv.Value}"))}");
+                return new DynamicXmlObject(dict);
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Returning null");
+            return null;
+        }
+    }
     public static dynamic Deserialize(string xml)
     {
         
