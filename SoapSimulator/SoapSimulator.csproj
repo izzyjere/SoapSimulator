@@ -4,9 +4,13 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>		
+		<UserSecretsId>607eb60b-4875-4e52-a656-276af9479628</UserSecretsId>		
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>		
+		<DockerfileContext>.</DockerfileContext>		
 	</PropertyGroup>
 
 	<ItemGroup>			
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />			
 		<PackageReference Include="MudBlazor" Version="6.1.9" />		
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.3">
